@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="800dp"
+    android:layout_height="412dp"
+    android:background="@drawable/backgammonbackground1"
+    tools:context=".OfflineGameActivity">
+
+
+    <ImageView
+        android:id="@+id/bPiece1"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="428dp"
+        android:layout_marginTop="366dp"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece2"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="428dp"
+        android:layout_marginTop="336dp"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece3"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="428dp"
+        android:layout_marginTop="306dp"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece4"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="428dp"
+        android:layout_marginTop="276dp"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece5"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="428dp"
+        android:layout_marginTop="246dp"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece6"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="94dp"
+        android:layout_marginTop="14dp"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece7"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="94dp"
+        android:layout_marginTop="44dp"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece8"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="94dp"
+        android:layout_marginTop="74dp"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece10"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="94dp"
+        android:layout_marginTop="134dp"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece9"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="94dp"
+        android:layout_marginTop="104dp"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece7"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="94dp"
+        android:layout_marginTop="336dp"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece8"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="94dp"
+        android:layout_marginTop="306dp"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece10"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="94dp"
+        android:layout_marginTop="246dp"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece6"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="94dp"
+        android:layout_marginTop="366dp"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece9"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="94dp"
+        android:layout_marginTop="276dp"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/bPiece11"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="292dp"
+        android:layout_marginTop="366dp"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece12"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="292dp"
+        android:layout_marginTop="336dp"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece13"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="292dp"
+        android:layout_marginTop="306dp"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece15"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="674dp"
+        android:layout_marginTop="14dp"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece14"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="674dp"
+        android:layout_marginTop="44dp"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece1"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="428dp"
+        android:layout_marginTop="14dp"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece2"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="428dp"
+        android:layout_marginTop="44dp"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece3"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="428dp"
+        android:layout_marginTop="74dp"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece4"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="428dp"
+        android:layout_marginTop="104dp"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece5"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="428dp"
+        android:layout_marginTop="134dp"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece11"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="292dp"
+        android:layout_marginTop="14dp"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece12"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="292dp"
+        android:layout_marginTop="44dp"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece13"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="292dp"
+        android:layout_marginTop="74dp"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece14"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="674dp"
+        android:layout_marginTop="366dp"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece15"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="674dp"
+        android:layout_marginTop="336dp"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
