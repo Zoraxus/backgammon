@@ -12,6 +12,15 @@ public class Game {
         }
         boardSetUp(ll);
     }
+    public boolean checkIfColumnIsEmpty(int colNum){
+        return !(this.columns[colNum-1].getList().size() > 0);
+    }
+    public Piece move(int colNum1, int colNum2){
+        Piece p = this.columns[colNum1-1].getList().getLast();
+        this.columns[colNum1-1].getList().removeLast();
+        this.columns[colNum2-1].getList().add(p);
+        return p;
+    }
     private void boardSetUp(LinkedList<Integer> ll){
         this.columns[0].addToList(new Piece(ll.get(0),0));
         this.columns[0].addToList(new Piece(ll.get(1),0));
@@ -43,10 +52,20 @@ public class Game {
         this.columns[18].addToList(new Piece(ll.get(14),0));
         this.columns[23].addToList(new Piece(ll.get(28),1));
         this.columns[23].addToList(new Piece(ll.get(29),1));
-
     }
+
+    public LinkedList<Piece> getBLueEaten() {
+        return BLueEaten;
+    }
+
+    public LinkedList<Piece> getRedEaten() {
+        return RedEaten;
+    }
+
     public Column getAcolumn(int index){
-        return this.columns[index];
+        return this.columns[index-1];
     }
     private Column[] columns;
+    private LinkedList<Piece> RedEaten = new LinkedList<>();
+    private LinkedList<Piece> BLueEaten = new LinkedList<>();
 }
