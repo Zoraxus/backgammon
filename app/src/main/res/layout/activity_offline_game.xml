@@ -7,14 +7,57 @@
     android:background="@drawable/backgammonbackground1"
     tools:context=".OfflineGameActivity">
 
+    <ImageView
+        android:id="@+id/ColumnHighlihgt1"
+        android:layout_width="130px"
+        android:layout_height="600px"
+        android:layout_marginStart="1226px"
+        android:layout_marginTop="450px"
+        android:src="@drawable/highlightcolumndown"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="visible"/>
+
+    <ImageView
+        android:id="@+id/ColumnHighlihgt2"
+        android:layout_width="130px"
+        android:layout_height="600px"
+        android:layout_marginStart="1096px"
+        android:layout_marginTop="450px"
+        android:src="@drawable/highlightcolumndown"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="visible"/>
+    <ImageView
+        android:id="@+id/ColumnHighlihgt3"
+        android:layout_width="130px"
+        android:layout_height="600px"
+        android:layout_marginStart="1226px"
+        android:layout_marginTop="37px"
+        android:src="@drawable/highlightcolumnup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:id="@+id/ColumnHighlihgt4"
+        android:layout_width="130px"
+        android:layout_height="600px"
+        android:layout_marginStart="1096px"
+        android:layout_marginTop="37px"
+        android:src="@drawable/highlightcolumnup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+
     <Button
         android:id="@+id/roll1"
         android:layout_width="120px"
         android:layout_height="120px"
-        android:onClick="RollDice"
         android:layout_marginTop="180dp"
         android:layout_marginEnd="736dp"
         android:background="@drawable/reddice"
+        android:onClick="RollDice"
         android:text="ROLL"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,10 +66,10 @@
         android:id="@+id/roll2"
         android:layout_width="120px"
         android:layout_height="120px"
-        android:onClick="RollDice"
         android:layout_marginTop="180dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/reddice"
+        android:onClick="RollDice"
         android:text="ROLL"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -48,8 +91,8 @@
         android:layout_height="80px"
         android:layout_marginStart="1950px"
         android:layout_marginTop="104dp"
-        android:visibility="invisible"
         android:src="@drawable/dice1"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,8 +102,8 @@
         android:layout_height="80px"
         android:layout_marginStart="1950px"
         android:layout_marginTop="336dp"
-        android:visibility="invisible"
         android:src="@drawable/dice1"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,8 +114,8 @@
         android:layout_height="80px"
         android:layout_marginStart="1950px"
         android:layout_marginTop="272dp"
-        android:visibility="invisible"
         android:src="@drawable/dice1"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -82,8 +125,8 @@
         android:layout_height="80px"
         android:layout_marginStart="60px"
         android:layout_marginTop="44dp"
-        android:visibility="invisible"
         android:src="@drawable/dice1"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -93,8 +136,8 @@
         android:layout_height="80px"
         android:layout_marginStart="60px"
         android:layout_marginTop="104dp"
-        android:visibility="invisible"
         android:src="@drawable/dice1"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -104,8 +147,8 @@
         android:layout_height="80px"
         android:layout_marginStart="60px"
         android:layout_marginTop="336dp"
-        android:visibility="invisible"
         android:src="@drawable/dice1"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -116,8 +159,8 @@
         android:layout_height="80px"
         android:layout_marginStart="60px"
         android:layout_marginTop="272dp"
-        android:visibility="invisible"
         android:src="@drawable/dice1"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -255,8 +298,9 @@
         android:id="@+id/rPiece3"
         android:layout_width="80px"
         android:layout_height="80px"
-        android:layout_marginStart="247px"
+        android:layout_marginStart="94dp"
         android:layout_marginTop="960px"
+        android:layout_marginEnd="11dp"
         android:src="@drawable/redpiece"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

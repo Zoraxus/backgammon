@@ -1,4 +1,5 @@
 package com.example.backgammon;
+import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Random;
 import java.util.Map;
@@ -26,10 +27,9 @@ import com.example.backgammon.Classes.Piece;
 
 import java.util.LinkedList;
 
-import pl.droidsonroids.gif.GifImageView;
-
 public class OfflineGameActivity extends Activity {
     Random rand = new Random();
+    SecureRandom srandom = new SecureRandom();
     private int turn = 1;
     private int press = 0;
     private int col_pressed = -1;
@@ -179,7 +179,7 @@ public class OfflineGameActivity extends Activity {
             }
         }
         ImageView imgview = findViewById(p.getId());
-        if (colNum2 <= 11) {
+        if (colNum2 <= 12) {
             imgview.setY(this.piecesPosBottom[place - 1]);
             imgview.setX(this.columnsPos[colNum2 - 1][1][0] + 27);
         } else {
@@ -194,8 +194,38 @@ public class OfflineGameActivity extends Activity {
     }
     public boolean IsValidMove(int col1, int col2){
         if (col1 == -1){
-            if (this.game.getAcolumn(col2).getList().size() <= 1 && (col2 == 25-this.MovePower1 || col2 == 25-this.MovePower2)){
-                return true;
+            if (this.game.getAcolumn(col2).getList().size() <= 1){
+                if (col2 == 25-this.MovePower1){
+                    if (this.NumOfMoves <= 2){
+                        this.MovePower1 = 0;
+                        ImageView img1 = findViewById(R.id.dice1);
+                        ImageView img3 = findViewById(R.id.dice3);
+                        ImageView img5 = findViewById(R.id.dice5);
+                        ImageView img7 = findViewById(R.id.dice7);
+                        img1.setVisibility(View.INVISIBLE);
+                        img3.setVisibility(View.INVISIBLE);
+                        img5.setVisibility(View.INVISIBLE);
+                        img7.setVisibility(View.INVISIBLE);
+                    }
+                    return true;
+                }
+                else if(col2 == 25-this.MovePower2){
+                    if (this.NumOfMoves <= 2){
+                        this.MovePower2 = 0;
+                        ImageView img2 = findViewById(R.id.dice2);
+                        ImageView img4 = findViewById(R.id.dice4);
+                        ImageView img6 = findViewById(R.id.dice6);
+                        ImageView img8 = findViewById(R.id.dice8);
+                        img2.setVisibility(View.INVISIBLE);
+                        img4.setVisibility(View.INVISIBLE);
+                        img6.setVisibility(View.INVISIBLE);
+                        img8.setVisibility(View.INVISIBLE);
+                    }
+                    return true;
+                }
+                else{
+                    return false;
+                }
             }
             else
             {
@@ -203,8 +233,38 @@ public class OfflineGameActivity extends Activity {
             }
         }
         else if(col1 == -2){
-            if (this.game.getAcolumn(col2).getList().size() <= 1 && (col2 == this.MovePower1 || col2 == this.MovePower2)){
-                return true;
+            if (this.game.getAcolumn(col2).getList().size() <= 1){
+                if (col2 == this.MovePower1){
+                    if (this.NumOfMoves <= 2){
+                        this.MovePower1 = 0;
+                        ImageView img1 = findViewById(R.id.dice1);
+                        ImageView img3 = findViewById(R.id.dice3);
+                        ImageView img5 = findViewById(R.id.dice5);
+                        ImageView img7 = findViewById(R.id.dice7);
+                        img1.setVisibility(View.INVISIBLE);
+                        img3.setVisibility(View.INVISIBLE);
+                        img5.setVisibility(View.INVISIBLE);
+                        img7.setVisibility(View.INVISIBLE);
+                    }
+                    return true;
+                }
+                else if(col2 == this.MovePower2){
+                    if (this.NumOfMoves <= 2){
+                        this.MovePower2 = 0;
+                        ImageView img2 = findViewById(R.id.dice2);
+                        ImageView img4 = findViewById(R.id.dice4);
+                        ImageView img6 = findViewById(R.id.dice6);
+                        ImageView img8 = findViewById(R.id.dice8);
+                        img2.setVisibility(View.INVISIBLE);
+                        img4.setVisibility(View.INVISIBLE);
+                        img6.setVisibility(View.INVISIBLE);
+                        img8.setVisibility(View.INVISIBLE);
+                    }
+                    return true;
+                }
+                else{
+                    return false;
+                }
             }
             else
             {
@@ -293,8 +353,8 @@ public class OfflineGameActivity extends Activity {
         }
     }
     public void RollDice(View view){
-        int dice1 = Math.abs(rand.nextInt()%6)+1;
-        int dice2 = Math.abs(rand.nextInt()%6)+1;
+        int dice1 = Math.abs(srandom.nextInt()%6)+1;
+        int dice2 = Math.abs(srandom.nextInt()%6)+1;
         if (dice1 == dice2){
             this.NumOfMoves = 4;
             this.MovePower1 = dice1;
@@ -373,15 +433,15 @@ public class OfflineGameActivity extends Activity {
             }
         }
         else {
-            if (this.game.getAcolumn(col).getList().size() == 0 || this.game.getAcolumn(col).getList().getFirst().getType() == 1){
-                Piece p = this.game.getBLueEaten().getLast();
-                this.game.getBLueEaten().removeLast();
+            if (this.game.getAcolumn(col).getList().size() == 0 || this.game.getAcolumn(col).getList().getFirst().getType() == 0){
+                Piece p = this.game.getRedEaten().getLast();
+                this.game.getRedEaten().removeLast();
                 this.game.getAcolumn(col).getList().add(p);
                 ImageView imageview = findViewById(p.getId());
-                imageview.setY(this.piecesPosTop[this.game.getAcolumn(col).getList().size() - 1]);
-                imageview.setX(this.columnsPos[Math.abs(col - 24)][1][0] + 27);
-                if(this.game.getBLueEaten().size() == 0){
-                    this.is_blue_eaten = false;
+                imageview.setY(this.piecesPosBottom[this.game.getAcolumn(col).getList().size() - 1]);
+                imageview.setX(this.columnsPos[col-1][1][0] + 27);
+                if(this.game.getRedEaten().size() == 0){
+                    this.is_red_eaten = false;
                 }
 
             }
@@ -405,6 +465,66 @@ public class OfflineGameActivity extends Activity {
             }
         }
     }
+    public void highlightPossibleColumns(int col) {
+        int col1, col2;
+        int mult = 0;
+        int type = this.game.getAcolumn(col).getList().get(0).getType();
+        if (type == 1) {
+            mult = -1;
+        }
+        else{
+            mult = 1;
+        }
+        col1 = col + mult*this.MovePower1;
+        col2 = col + mult*this.MovePower2;
+        if (col1 > 0 && col1 != col) {
+            if (col1 > 12) {
+                ImageView highlight = findViewById(R.id.ColumnHighlihgt3);
+                highlight.setX(this.columnsPos[col1-1][0][0] + 7);
+                highlight.setVisibility(View.VISIBLE);
+            } else {
+                ImageView highlight = findViewById(R.id.ColumnHighlihgt1);
+                if(col1 == 6)
+                {
+                    highlight.setX(1096); // because i know
+                }
+                else
+                {
+                    highlight.setX(this.columnsPos[col1][0][0] + 7);
+                }
+                highlight.setVisibility(View.VISIBLE);
+            }
+        }
+        if (col2 > 0 && col2 != col) {
+            if (col2 > 12) {
+                ImageView highlight = findViewById(R.id.ColumnHighlihgt4);
+                highlight.setX(this.columnsPos[col2-1][0][0] + 7);
+                highlight.setVisibility(View.VISIBLE);
+            } else {
+                ImageView highlight = findViewById(R.id.ColumnHighlihgt2);
+                if(col2 == 6)
+                {
+                    highlight.setX(1096); // because i know
+                }
+                else
+                {
+                    highlight.setX(this.columnsPos[col2][0][0] + 7);
+                }
+                highlight.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+    public void deHighlightColumns()
+    {
+        ImageView highlight = findViewById(R.id.ColumnHighlihgt1);
+        highlight.setVisibility(View.INVISIBLE);
+        highlight = findViewById(R.id.ColumnHighlihgt2);
+        highlight.setVisibility(View.INVISIBLE);
+        highlight = findViewById(R.id.ColumnHighlihgt3);
+        highlight.setVisibility(View.INVISIBLE);
+        highlight = findViewById(R.id.ColumnHighlihgt4);
+        highlight.setVisibility(View.INVISIBLE);
+    }
     @Override
     public boolean onTouchEvent(MotionEvent e){
     switch (e.getAction()){
@@ -425,12 +545,13 @@ public class OfflineGameActivity extends Activity {
                             this.col_pressed = -2;
                             this.highlightMid(1);
                         }
-                        if (!CheckIfColumnIsEmpty(col)) {
+                        else if (!CheckIfColumnIsEmpty(col)) {
                             if (this.game.getAcolumn(col).getList().get(0).getType() == this.turn)
                             {
                                 this.press = 1;
                                 this.col_pressed = col;
                                 highlightColumn(col, true);
+                                highlightPossibleColumns(col);
                             }
                         }
                     }
@@ -447,13 +568,20 @@ public class OfflineGameActivity extends Activity {
                         }
                     }
                     highlightColumn(this.col_pressed, false);
+                    deHighlightColumns();
                     this.press = 0;
                 }
                 if ((this.col_pressed == -1 || this. col_pressed == -2) && this.press == 1){
                     if (col != -1) {
                         if (IsValidMove(this.col_pressed, col)) {
                             GetOutOfEat(this.col_pressed, col);
+                            this.NumOfMoves--;
+                            if(this.NumOfMoves == 0){
+                                this.turn = Math.abs(this.turn-1);
+                                System.out.println(this.turn);
+                            }
                         }
+                        deHighlightColumns();
                         this.press = 0;
                     }
                 }
