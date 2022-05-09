@@ -12,6 +12,7 @@ import static java.lang.Math.round;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Bundle;
 import android.text.method.Touch;
@@ -19,16 +20,18 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.backgammon.Classes.Column;
 import com.example.backgammon.Classes.Game;
 import com.example.backgammon.Classes.Piece;
 
+import org.w3c.dom.Text;
+
 import java.util.LinkedList;
 
 public class OfflineGameActivity extends Activity {
-    Random rand = new Random();
     SecureRandom srandom = new SecureRandom();
     private int turn = 1;
     private int press = 0;
@@ -51,6 +54,9 @@ public class OfflineGameActivity extends Activity {
     private int MovePower2 = 0;
     private boolean is_red_eaten = false;
     private boolean is_blue_eaten = false;
+    private LinkedList<Piece> blueOut = new LinkedList<>();
+    private LinkedList<Piece> redOut = new LinkedList<>();
+    private boolean didGameEnd = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +69,6 @@ public class OfflineGameActivity extends Activity {
         this.diceMap.put(4,R.drawable.dice4);
         this.diceMap.put(5,R.drawable.dice5);
         this.diceMap.put(6,R.drawable.dice6);
-
     }
     public LinkedList<Integer> getIds(){
         LinkedList<Integer> ll = new LinkedList<Integer>();
@@ -194,16 +199,12 @@ public class OfflineGameActivity extends Activity {
     }
     public boolean IsValidMove(int col1, int col2){
         if (col1 == -1){
-            if (this.game.getAcolumn(col2).getList().size() <= 1){
+            if (this.game.getAcolumn(col2).getList().size() <= 1 || this.turn == this.game.getAcolumn(col2).getList().getFirst().getType()){
                 if (col2 == 25-this.MovePower1){
                     if (this.NumOfMoves <= 2){
                         this.MovePower1 = 0;
-                        ImageView img1 = findViewById(R.id.dice1);
-                        ImageView img3 = findViewById(R.id.dice3);
                         ImageView img5 = findViewById(R.id.dice5);
                         ImageView img7 = findViewById(R.id.dice7);
-                        img1.setVisibility(View.INVISIBLE);
-                        img3.setVisibility(View.INVISIBLE);
                         img5.setVisibility(View.INVISIBLE);
                         img7.setVisibility(View.INVISIBLE);
                     }
@@ -212,12 +213,8 @@ public class OfflineGameActivity extends Activity {
                 else if(col2 == 25-this.MovePower2){
                     if (this.NumOfMoves <= 2){
                         this.MovePower2 = 0;
-                        ImageView img2 = findViewById(R.id.dice2);
-                        ImageView img4 = findViewById(R.id.dice4);
                         ImageView img6 = findViewById(R.id.dice6);
                         ImageView img8 = findViewById(R.id.dice8);
-                        img2.setVisibility(View.INVISIBLE);
-                        img4.setVisibility(View.INVISIBLE);
                         img6.setVisibility(View.INVISIBLE);
                         img8.setVisibility(View.INVISIBLE);
                     }
@@ -233,16 +230,12 @@ public class OfflineGameActivity extends Activity {
             }
         }
         else if(col1 == -2){
-            if (this.game.getAcolumn(col2).getList().size() <= 1){
+            if (this.game.getAcolumn(col2).getList().size() <= 1 || this.turn == this.game.getAcolumn(col2).getList().getFirst().getType()){
                 if (col2 == this.MovePower1){
                     if (this.NumOfMoves <= 2){
                         this.MovePower1 = 0;
-                        ImageView img1 = findViewById(R.id.dice1);
-                        ImageView img3 = findViewById(R.id.dice3);
                         ImageView img5 = findViewById(R.id.dice5);
                         ImageView img7 = findViewById(R.id.dice7);
-                        img1.setVisibility(View.INVISIBLE);
-                        img3.setVisibility(View.INVISIBLE);
                         img5.setVisibility(View.INVISIBLE);
                         img7.setVisibility(View.INVISIBLE);
                     }
@@ -251,12 +244,8 @@ public class OfflineGameActivity extends Activity {
                 else if(col2 == this.MovePower2){
                     if (this.NumOfMoves <= 2){
                         this.MovePower2 = 0;
-                        ImageView img2 = findViewById(R.id.dice2);
-                        ImageView img4 = findViewById(R.id.dice4);
                         ImageView img6 = findViewById(R.id.dice6);
                         ImageView img8 = findViewById(R.id.dice8);
-                        img2.setVisibility(View.INVISIBLE);
-                        img4.setVisibility(View.INVISIBLE);
                         img6.setVisibility(View.INVISIBLE);
                         img8.setVisibility(View.INVISIBLE);
                     }
@@ -284,12 +273,8 @@ public class OfflineGameActivity extends Activity {
             {
                 if (this.NumOfMoves <= 2) {
                     this.MovePower1 = 0;
-                    ImageView img1 = findViewById(R.id.dice1);
-                    ImageView img3 = findViewById(R.id.dice3);
                     ImageView img5 = findViewById(R.id.dice5);
                     ImageView img7 = findViewById(R.id.dice7);
-                    img1.setVisibility(View.INVISIBLE);
-                    img3.setVisibility(View.INVISIBLE);
                     img5.setVisibility(View.INVISIBLE);
                     img7.setVisibility(View.INVISIBLE);
                 }
@@ -298,12 +283,8 @@ public class OfflineGameActivity extends Activity {
             else if (col1 - this.MovePower2 == col2 && this.MovePower2 != 0)
             {
                 if (this.NumOfMoves <= 2) {
-                    ImageView img2 = findViewById(R.id.dice2);
-                    ImageView img4 = findViewById(R.id.dice4);
                     ImageView img6 = findViewById(R.id.dice6);
                     ImageView img8 = findViewById(R.id.dice8);
-                    img2.setVisibility(View.INVISIBLE);
-                    img4.setVisibility(View.INVISIBLE);
                     img6.setVisibility(View.INVISIBLE);
                     img8.setVisibility(View.INVISIBLE);
                     this.MovePower2 = 0;
@@ -319,12 +300,8 @@ public class OfflineGameActivity extends Activity {
             if (col1 + this.MovePower1 == col2 && this.MovePower1 != 0)
             {
                 if (this.NumOfMoves <= 2) {
-                    ImageView img1 = findViewById(R.id.dice1);
-                    ImageView img3 = findViewById(R.id.dice3);
                     ImageView img5 = findViewById(R.id.dice5);
                     ImageView img7 = findViewById(R.id.dice7);
-                    img1.setVisibility(View.INVISIBLE);
-                    img3.setVisibility(View.INVISIBLE);
                     img5.setVisibility(View.INVISIBLE);
                     img7.setVisibility(View.INVISIBLE);
                     this.MovePower1 = 0;
@@ -334,12 +311,8 @@ public class OfflineGameActivity extends Activity {
             else if(col1 + this.MovePower2 == col2 && this.MovePower2 != 0)
             {
                 if (this.NumOfMoves <= 2) {
-                    ImageView img2 = findViewById(R.id.dice2);
-                    ImageView img4 = findViewById(R.id.dice4);
                     ImageView img6 = findViewById(R.id.dice6);
                     ImageView img8 = findViewById(R.id.dice8);
-                    img2.setVisibility(View.INVISIBLE);
-                    img4.setVisibility(View.INVISIBLE);
                     img6.setVisibility(View.INVISIBLE);
                     img8.setVisibility(View.INVISIBLE);
                     this.MovePower2 = 0;
@@ -352,51 +325,140 @@ public class OfflineGameActivity extends Activity {
             }
         }
     }
-    public void RollDice(View view){
-        int dice1 = Math.abs(srandom.nextInt()%6)+1;
-        int dice2 = Math.abs(srandom.nextInt()%6)+1;
-        if (dice1 == dice2){
-            this.NumOfMoves = 4;
-            this.MovePower1 = dice1;
-            this.MovePower2 = dice2;
+    public boolean AreThereAnyPossibleMoves(int type) {
+        //reminder for myself
+        //there is a problem for end game when i roll numbers that i cant move but can get out.
+        int mult;
+        if(type == 1){
+            mult = -1;
         }
         else
         {
-            this.NumOfMoves = 2;
-            this.MovePower1 = dice1;
-            this.MovePower2 = dice2;
+            mult = 1;
         }
-        Button button1 = findViewById(R.id.roll1);
-        Button button2 = findViewById(R.id.roll2);
-        button1.setBackgroundResource(R.drawable.reddiceglow);
-        button2.setBackgroundResource(R.drawable.reddiceglow);
-        ImageView imgV1 = findViewById(R.id.dice1);
-        ImageView imgV3 = findViewById(R.id.dice3);
-        ImageView imgV5 = findViewById(R.id.dice5);
-        ImageView imgV7 = findViewById(R.id.dice7);
-        imgV1.setImageResource(this.diceMap.get(dice1));
-        imgV1.setVisibility(View.VISIBLE);
-        imgV3.setImageResource(this.diceMap.get(dice1));
-        imgV3.setVisibility(View.VISIBLE);
-        imgV5.setImageResource(this.diceMap.get(dice1));
-        imgV5.setVisibility(View.VISIBLE);
-        imgV7.setImageResource(this.diceMap.get(dice1));
-        imgV7.setVisibility(View.VISIBLE);
-        ImageView imgV2 = findViewById(R.id.dice2);
-        ImageView imgV4 = findViewById(R.id.dice4);
-        ImageView imgV6 = findViewById(R.id.dice6);
-        ImageView imgV8 = findViewById(R.id.dice8);
-        imgV2.setImageResource(this.diceMap.get(dice2));
-        imgV2.setVisibility(View.VISIBLE);
-        imgV4.setImageResource(this.diceMap.get(dice2));
-        imgV4.setVisibility(View.VISIBLE);
-        imgV6.setImageResource(this.diceMap.get(dice2));
-        imgV6.setVisibility(View.VISIBLE);
-        imgV8.setImageResource(this.diceMap.get(dice2));
-        imgV8.setVisibility(View.VISIBLE);
-        System.out.println("dice1: "+dice1);
-        System.out.println("dice2: "+dice2);
-        this.rolled = true;
+        if (this.is_blue_eaten)
+        {
+            if(this.game.getAcolumn(25-this.MovePower1).getList().size() <= 1 || this.game.getAcolumn(25-this.MovePower1).getList().size() <= 1)
+            {
+                return true;
+            }
+            else if(this.game.getAcolumn(25-this.MovePower1).getList().getFirst().getType() == 1
+                    || this.game.getAcolumn(25-this.MovePower2).getList().getFirst().getType() == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (this.is_red_eaten)
+        {
+            if(this.game.getAcolumn(this.MovePower1).getList().size() <= 1 || this.game.getAcolumn(this.MovePower1).getList().size() <= 1)
+            {
+                return true;
+            }
+            else if(this.game.getAcolumn(this.MovePower1).getList().getFirst().getType() == 0
+                    || this.game.getAcolumn(this.MovePower2).getList().getFirst().getType() == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        int col1,col2;
+        for (int i=0;i<24;i++){
+            if(this.game.getAcolumn(i+1).getList().size() > 0)
+            {
+                if (this.game.getAcolumn(i+1).getList().getFirst().getType() == type)
+                {
+                    col1 = i + this.MovePower1*mult + 1;
+                    col2 = i + this.MovePower2*mult + 1;
+                    if(col1 > 0 && col1 <= 24)
+                    {
+                        if(this.game.getAcolumn(col1).getList().size() <= 1)
+                        {
+                            return true;
+                        }
+                        else if(this.game.getAcolumn(col1).getList().getFirst().getType() == type)
+                        {
+                            return true;
+                        }
+                    }
+                    if(col2 > 0 && col2 <= 24)
+                    {
+                        if(this.game.getAcolumn(col2).getList().size() <= 1)
+                        {
+                            return true;
+                        }
+                        else if(this.game.getAcolumn(col2).getList().getFirst().getType() == type)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    public void RollDice(View view){
+        if (this.rolled == false){
+            int dice1 = Math.abs(srandom.nextInt()%6)+1;
+            int dice2 = Math.abs(srandom.nextInt()%6)+1;
+            if (dice1 == dice2){
+                this.NumOfMoves = 4;
+                this.MovePower1 = dice1;
+                this.MovePower2 = dice2;
+            }
+            else
+            {
+                this.NumOfMoves = 2;
+                this.MovePower1 = dice1;
+                this.MovePower2 = dice2;
+            }
+            if(!AreThereAnyPossibleMoves(this.turn)){
+                this.turn = Math.abs(this.turn-1);
+                this.NumOfMoves = 0;
+            }
+            else
+            {
+                Button button1 = findViewById(R.id.roll1);
+                button1.setBackgroundResource(R.drawable.reddiceglow);
+                ImageView imgV5 = findViewById(R.id.dice5);
+                ImageView imgV7 = findViewById(R.id.dice7);
+                imgV5.setImageResource(this.diceMap.get(dice1));
+                imgV5.setVisibility(View.VISIBLE);
+                imgV7.setImageResource(this.diceMap.get(dice1));
+                imgV7.setVisibility(View.VISIBLE);
+                ImageView imgV6 = findViewById(R.id.dice6);
+                ImageView imgV8 = findViewById(R.id.dice8);
+                imgV6.setImageResource(this.diceMap.get(dice2));
+                imgV6.setVisibility(View.VISIBLE);
+                imgV8.setImageResource(this.diceMap.get(dice2));
+                imgV8.setVisibility(View.VISIBLE);
+                System.out.println("dice1: "+dice1);
+                System.out.println("dice2: "+dice2);
+                if(this.turn == 1 && this.is_blue_eaten)
+                {
+                    highlightPossibleColumns(-1);
+                }
+                else if(this.turn == 0 && this.is_red_eaten)
+                {
+                    highlightPossibleColumns(-2);
+                }
+                this.rolled = true;
+            }
+            ImageView arrow = findViewById(R.id.turnArrow);
+            if(this.turn == 1){
+                arrow.setImageResource(R.drawable.bluearrowdown);
+            }
+            else
+            {
+                arrow.setImageResource(R.drawable.redarrowup);
+            }
+        }
     }
     public void highlightMid(int type){};
     public void GetOutOfEat(int midType, int col){
@@ -467,17 +529,66 @@ public class OfflineGameActivity extends Activity {
     }
     public void highlightPossibleColumns(int col) {
         int col1, col2;
-        int mult = 0;
-        int type = this.game.getAcolumn(col).getList().get(0).getType();
-        if (type == 1) {
-            mult = -1;
+        boolean valid1 = false;
+        boolean valid2 = false;
+        if (col == -1)
+        {
+            col1 = 25-this.MovePower1;
+            if(this.game.getAcolumn(col1).getList().size() > 1){
+                if (this.game.getAcolumn(col1).getList().getFirst().getType() != this.turn){
+                    col1=0;
+                }
+            }
+            col2 = 25-this.MovePower2;
+            if(this.game.getAcolumn(col2).getList().size() > 1){
+                if (this.game.getAcolumn(col2).getList().getFirst().getType() != this.turn){
+                    col2=0;
+                }
+            }
         }
-        else{
-            mult = 1;
+        else if (col == -2)
+        {
+            col1 = this.MovePower1;
+            if(this.game.getAcolumn(col1).getList().size() > 1){
+                if (this.game.getAcolumn(col1).getList().getFirst().getType() != this.turn){
+                    col1=0;
+                }
+            }
+            col2 = this.MovePower2;
+            if(this.game.getAcolumn(col2).getList().size() > 1){
+                if (this.game.getAcolumn(col2).getList().getFirst().getType() != this.turn){
+                    col2=0;
+                }
+            }
         }
-        col1 = col + mult*this.MovePower1;
-        col2 = col + mult*this.MovePower2;
-        if (col1 > 0 && col1 != col) {
+        else
+        {
+            int mult = 0;
+            int type = this.game.getAcolumn(col).getList().get(0).getType();
+            if (type == 1) {
+                mult = -1;
+            }
+            else{
+                mult = 1;
+            }
+            col1 = col + mult*this.MovePower1;
+            if (col1 > 0 && col1 < 25) {
+                if (this.game.getAcolumn(col1).getList().size() > 1) {
+                    if (this.game.getAcolumn(col1).getList().getFirst().getType() != this.turn) {
+                        col1 = 0;
+                    }
+                }
+            }
+            col2 = col + mult*this.MovePower2;
+            if (col2 > 0 && col2 < 25) {
+                if (this.game.getAcolumn(col2).getList().size() > 1) {
+                    if (this.game.getAcolumn(col2).getList().getFirst().getType() != this.turn) {
+                        col2 = 0;
+                    }
+                }
+            }
+        }
+        if (col1 > 0 && col1 != col && col1 <= 24) {
             if (col1 > 12) {
                 ImageView highlight = findViewById(R.id.ColumnHighlihgt3);
                 highlight.setX(this.columnsPos[col1-1][0][0] + 7);
@@ -495,7 +606,7 @@ public class OfflineGameActivity extends Activity {
                 highlight.setVisibility(View.VISIBLE);
             }
         }
-        if (col2 > 0 && col2 != col) {
+        if (col2 > 0 && col2 != col && col2 <= 24) {
             if (col2 > 12) {
                 ImageView highlight = findViewById(R.id.ColumnHighlihgt4);
                 highlight.setX(this.columnsPos[col2-1][0][0] + 7);
@@ -514,8 +625,7 @@ public class OfflineGameActivity extends Activity {
             }
         }
     }
-    public void deHighlightColumns()
-    {
+    public void deHighlightColumns() {
         ImageView highlight = findViewById(R.id.ColumnHighlihgt1);
         highlight.setVisibility(View.INVISIBLE);
         highlight = findViewById(R.id.ColumnHighlihgt2);
@@ -525,73 +635,335 @@ public class OfflineGameActivity extends Activity {
         highlight = findViewById(R.id.ColumnHighlihgt4);
         highlight.setVisibility(View.INVISIBLE);
     }
-    @Override
-    public boolean onTouchEvent(MotionEvent e){
-    switch (e.getAction()){
-        case MotionEvent.ACTION_DOWN:
-            if (this.NumOfMoves > 0){
-                int x = round(e.getX());
-                int y = round(e.getY());
-                int col = findColumn(x,y);
-                if (this.press == 0) {
-                    if (col != -1) {
-                        if (this.is_blue_eaten && this.turn == 1){
-                            this.press = 1;
-                            this.col_pressed = -1;
-                            this.highlightMid(1);
-                        }
-                        else if (this.is_red_eaten && this.turn == 0){
-                            this.press = 1;
-                            this.col_pressed = -2;
-                            this.highlightMid(1);
-                        }
-                        else if (!CheckIfColumnIsEmpty(col)) {
-                            if (this.game.getAcolumn(col).getList().get(0).getType() == this.turn)
-                            {
-                                this.press = 1;
-                                this.col_pressed = col;
-                                highlightColumn(col, true);
-                                highlightPossibleColumns(col);
-                            }
-                        }
-                    }
-                }
-                else{
-                    if (col != -1) {
-                        if (IsValidMove(this.col_pressed,col)) {
-                            move(this.col_pressed, col);
-                            this.NumOfMoves--;
-                            if(this.NumOfMoves == 0){
-                                this.turn = Math.abs(this.turn-1);
-                                System.out.println(this.turn);
-                            }
-                        }
-                    }
-                    highlightColumn(this.col_pressed, false);
-                    deHighlightColumns();
-                    this.press = 0;
-                }
-                if ((this.col_pressed == -1 || this. col_pressed == -2) && this.press == 1){
-                    if (col != -1) {
-                        if (IsValidMove(this.col_pressed, col)) {
-                            GetOutOfEat(this.col_pressed, col);
-                            this.NumOfMoves--;
-                            if(this.NumOfMoves == 0){
-                                this.turn = Math.abs(this.turn-1);
-                                System.out.println(this.turn);
-                            }
-                        }
-                        deHighlightColumns();
-                        this.press = 0;
+    public boolean checkForEndGame(int type){
+        if (type == 1){
+            if (this.is_blue_eaten == true)
+            {
+                return false;
+            }
+            for (int i=24;i>6;i--)
+            {
+                if(this.game.getAcolumn(i).getList().size() != 0)
+                {
+                    if(this.game.getAcolumn(i).getList().getFirst().getType() == 1)
+                    {
+                        return false;
                     }
                 }
             }
-        case MotionEvent.ACTION_UP:
-            if (this.NumOfMoves == 0){
-                Button button1 = findViewById(R.id.roll1);
-                Button button2 = findViewById(R.id.roll2);
-                button1.setBackgroundResource(R.drawable.reddice);
-                button2.setBackgroundResource(R.drawable.reddice);
+            return true;
+        }
+        else
+        {
+            if (this.is_red_eaten == true)
+            {
+                return false;
+            }
+            for (int i=1;i<19;i++)
+            {
+                if(this.game.getAcolumn(i).getList().size() != 0)
+                {
+                    if(this.game.getAcolumn(i).getList().getFirst().getType() == 0)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+    }
+    public boolean endGameMove(int col){
+        if(this.game.getAcolumn(col).getList().getFirst().getType() == 1)
+        {
+            System.out.println("please2");
+            if(col == this.MovePower1 || col == this.MovePower2)
+            {
+                System.out.println("please3");
+                Piece p = this.game.getAcolumn(col).getList().getLast();
+                this.blueOut.add(p);
+                this.game.getAcolumn(col).getList().removeLast();
+                ImageView img = findViewById(p.getId());
+                img.setVisibility(View.INVISIBLE);
+                if(col == this.MovePower1) {
+                    if (this.NumOfMoves <= 2) {
+                        ImageView img5 = findViewById(R.id.dice5);
+                        ImageView img7 = findViewById(R.id.dice7);
+                        img5.setVisibility(View.INVISIBLE);
+                        img7.setVisibility(View.INVISIBLE);
+                        this.MovePower1 = 0;
+                    }
+                }
+                else {
+                    if (this.NumOfMoves <= 2) {
+                        ImageView img6 = findViewById(R.id.dice6);
+                        ImageView img8 = findViewById(R.id.dice8);
+                        img6.setVisibility(View.INVISIBLE);
+                        img8.setVisibility(View.INVISIBLE);
+                        this.MovePower2 = 0;
+                    }
+                }
+                return true;
+            }
+            else if (col < this.MovePower1 || col < this.MovePower2)
+            {
+                boolean flag = true;
+                for (int i=col+1;i<=6;i++){
+                    if(this.game.getAcolumn(i).getList().size() != 0)
+                    {
+                        flag = false;
+                    }
+                }
+                if(flag)
+                {
+                    System.out.println("please3");
+                    Piece p = this.game.getAcolumn(col).getList().getLast();
+                    this.blueOut.add(p);
+                    this.game.getAcolumn(col).getList().removeLast();
+                    ImageView img = findViewById(p.getId());
+                    img.setVisibility(View.INVISIBLE);
+                    if(col < this.MovePower1) {
+                        if (this.NumOfMoves <= 2) {
+                            ImageView img5 = findViewById(R.id.dice5);
+                            ImageView img7 = findViewById(R.id.dice7);
+                            img5.setVisibility(View.INVISIBLE);
+                            img7.setVisibility(View.INVISIBLE);
+                            this.MovePower1 = 0;
+                        }
+                    }
+                    else {
+                        if (this.NumOfMoves <= 2) {
+                            ImageView img6 = findViewById(R.id.dice6);
+                            ImageView img8 = findViewById(R.id.dice8);
+                            img6.setVisibility(View.INVISIBLE);
+                            img8.setVisibility(View.INVISIBLE);
+                            this.MovePower2 = 0;
+                        }
+                    }
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            if(col == 25-this.MovePower1 || col == 25-this.MovePower2)
+            {
+                System.out.println("please3");
+                Piece p = this.game.getAcolumn(col).getList().getLast();
+                this.redOut.add(p);
+                this.game.getAcolumn(col).getList().removeLast();
+                ImageView img = findViewById(p.getId());
+                img.setVisibility(View.INVISIBLE);
+                if(col == 25-this.MovePower1) {
+                    ImageView img5 = findViewById(R.id.dice5);
+                    ImageView img7 = findViewById(R.id.dice7);
+                    img5.setVisibility(View.INVISIBLE);
+                    img7.setVisibility(View.INVISIBLE);
+                    this.MovePower1 = 0;
+                }
+                else {
+                    ImageView img6 = findViewById(R.id.dice6);
+                    ImageView img8 = findViewById(R.id.dice8);
+                    img6.setVisibility(View.INVISIBLE);
+                    img8.setVisibility(View.INVISIBLE);
+                    this.MovePower2 = 0;
+                }
+                return true;
+            }
+            else if (col > 25-this.MovePower1 || col > 25-this.MovePower2)
+            {
+                boolean flag = true;
+                for (int i=col-1;i>=19;i--){
+                    if(this.game.getAcolumn(i).getList().size() != 0)
+                    {
+                        flag = false;
+                    }
+                }
+                if(flag)
+                {
+                    System.out.println("please3");
+                    Piece p = this.game.getAcolumn(col).getList().getLast();
+                    this.blueOut.add(p);
+                    this.game.getAcolumn(col).getList().removeLast();
+                    ImageView img = findViewById(p.getId());
+                    img.setVisibility(View.INVISIBLE);
+                    if(col == 25-this.MovePower1) {
+                        ImageView img5 = findViewById(R.id.dice5);
+                        ImageView img7 = findViewById(R.id.dice7);
+                        img5.setVisibility(View.INVISIBLE);
+                        img7.setVisibility(View.INVISIBLE);
+                        this.MovePower1 = 0;
+                    }
+                    else {
+                        ImageView img6 = findViewById(R.id.dice6);
+                        ImageView img8 = findViewById(R.id.dice8);
+                        img6.setVisibility(View.INVISIBLE);
+                        img8.setVisibility(View.INVISIBLE);
+                        this.MovePower2 = 0;
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public boolean checkIfGameEnded(int type) {
+        if (type == 1){
+            if (this.blueOut.size() == 15)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else{
+            if (this.redOut.size() == 15)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+    public boolean IsValidOut(int col,int type){
+        System.out.println(col);
+        System.out.println(type);
+        System.out.println(MovePower1);
+        System.out.println(MovePower2);
+        if (type == 1)
+        {
+            if (col == this.MovePower1 || col == this.MovePower2) {
+                return true;
+            }
+            else if(col < this.MovePower1 || col < this.MovePower2) {
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else
+        {
+            if (col == 25-this.MovePower1 || col == 25-this.MovePower2) {
+                return true;
+            }
+            else if(col > 25-this.MovePower1 || col > 25-this.MovePower2) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+    public void EndTheGame(int type){
+        TextView txtview = findViewById(R.id.winsign);
+        if (type == 1){
+            txtview.setText("BLUE WON!");
+            txtview.setTextColor(Color.BLUE);
+        }
+        else{
+            txtview.setText("RED WON!");
+            txtview.setTextColor(Color.RED);
+        }
+        Button button1 = findViewById(R.id.savebutton);
+        Button button2 = findViewById(R.id.exitbutton);
+        txtview.setVisibility(View.VISIBLE);
+        button1.setVisibility(View.VISIBLE);
+        button2.setVisibility(View.VISIBLE);
+    }
+    public void saveResult(View view) {
+
+    }
+    public void exitActivity(View view) {
+        finish();
+    }
+    @Override
+    public boolean onTouchEvent(MotionEvent e){
+        if(!didGameEnd) {
+            switch (e.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    if (this.NumOfMoves > 0) {
+                        int x = round(e.getX());
+                        int y = round(e.getY());
+                        int col = findColumn(x, y);
+                        if (this.press == 0) {
+                            if (col != -1) {
+                                if (this.is_blue_eaten && this.turn == 1) {
+                                    this.press = 1;
+                                    this.col_pressed = -1;
+                                    this.highlightMid(1);
+                                } else if (this.is_red_eaten && this.turn == 0) {
+                                    this.press = 1;
+                                    this.col_pressed = -2;
+                                    this.highlightMid(1);
+                                } else if (!CheckIfColumnIsEmpty(col)) {
+                                    if (this.game.getAcolumn(col).getList().get(0).getType() == this.turn) {
+                                        this.press = 1;
+                                        this.col_pressed = col;
+                                        highlightColumn(col, true);
+                                        highlightPossibleColumns(col);
+                                    }
+                                }
+                            }
+                        } else {
+                            if (col == -1) {
+                                if (checkForEndGame(this.turn)) {
+                                    System.out.println("please0");
+                                    if (IsValidOut(this.col_pressed, this.turn)) {
+                                        System.out.println("please1");
+                                        boolean flag = endGameMove(this.col_pressed);
+                                        if (flag){
+                                            this.NumOfMoves--;
+                                            if (this.NumOfMoves == 0) {
+                                                this.turn = Math.abs(this.turn - 1);
+                                                System.out.println(this.turn);
+                                            }
+                                        }
+                                        if (checkIfGameEnded(this.turn)) {
+                                            this.didGameEnd = true;
+                                            EndTheGame(this.turn);
+                                        }
+                                    }
+                                }
+                            } else {
+                                if (IsValidMove(this.col_pressed, col)) {
+                                    move(this.col_pressed, col);
+                                    this.NumOfMoves--;
+                                    if (this.NumOfMoves == 0) {
+                                        this.turn = Math.abs(this.turn - 1);
+                                        System.out.println(this.turn);
+                                    }
+                                }
+                            }
+                            highlightColumn(this.col_pressed, false);
+                            deHighlightColumns();
+                            this.press = 0;
+                        }
+                        if ((this.col_pressed == -1 || this.col_pressed == -2) && this.press == 1) {
+                            if (col != -1) {
+                                if (IsValidMove(this.col_pressed, col)) {
+                                    GetOutOfEat(this.col_pressed, col);
+                                    this.NumOfMoves--;
+                                    deHighlightColumns();
+                                    if (this.NumOfMoves == 0) {
+                                        this.turn = Math.abs(this.turn - 1);
+                                        System.out.println(this.turn);
+                                    }
+                                }
+                                this.press = 0;
+                            }
+                        }
+                    }
+                case MotionEvent.ACTION_UP:
+                    if (this.NumOfMoves == 0) {
+                        this.rolled = false;
+                        Button button1 = findViewById(R.id.roll1);
+                        button1.setBackgroundResource(R.drawable.reddice);
+                    }
             }
         }
         return true;

@@ -8,6 +8,16 @@
     tools:context=".OfflineGameActivity">
 
     <ImageView
+        android:id="@+id/turnArrow"
+        android:layout_width="120px"
+        android:layout_height="120px"
+        android:layout_marginStart="736dp"
+        android:layout_marginTop="180dp"
+        android:src="@drawable/bluearrowdown"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
         android:id="@+id/ColumnHighlihgt1"
         android:layout_width="130px"
         android:layout_height="600px"
@@ -16,7 +26,7 @@
         android:src="@drawable/highlightcolumndown"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="visible"/>
+        android:visibility="invisible"/>
 
     <ImageView
         android:id="@+id/ColumnHighlihgt2"
@@ -27,7 +37,7 @@
         android:src="@drawable/highlightcolumndown"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="visible"/>
+        android:visibility="invisible"/>
     <ImageView
         android:id="@+id/ColumnHighlihgt3"
         android:layout_width="130px"
@@ -43,12 +53,12 @@
         android:id="@+id/ColumnHighlihgt4"
         android:layout_width="130px"
         android:layout_height="600px"
-        android:layout_marginStart="1096px"
-        android:layout_marginTop="37px"
+        android:layout_marginStart="416dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/highlightcolumnup"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/roll1"
@@ -62,62 +72,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/roll2"
-        android:layout_width="120px"
-        android:layout_height="120px"
-        android:layout_marginTop="180dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/reddice"
-        android:onClick="RollDice"
-        android:text="ROLL"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/dice1"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="1950px"
-        android:layout_marginTop="44dp"
-        android:src="@drawable/dice1"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/dice2"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="1950px"
-        android:layout_marginTop="104dp"
-        android:src="@drawable/dice1"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/dice3"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="1950px"
-        android:layout_marginTop="336dp"
-        android:src="@drawable/dice1"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <ImageView
-        android:id="@+id/dice4"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="1950px"
-        android:layout_marginTop="272dp"
-        android:src="@drawable/dice1"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/dice5"
@@ -464,6 +418,46 @@
         android:layout_marginTop="880px"
         android:src="@drawable/redpiece"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/winsign"
+        android:layout_width="282dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="268dp"
+        android:layout_marginTop="164dp"
+        android:text="X WON"
+        android:textSize="150px"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/savebutton"
+        android:layout_width="240px"
+        android:layout_height="120px"
+        android:layout_marginTop="232dp"
+        android:layout_marginEnd="308dp"
+        android:background="@drawable/blackbackground"
+        android:onClick="saveResult"
+        android:text="SAVE"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/exitbutton"
+        android:layout_width="240px"
+        android:layout_height="120px"
+        android:layout_marginTop="232dp"
+        android:layout_marginEnd="400dp"
+        android:background="@drawable/blackbackground"
+        android:onClick="exitActivity"
+        android:text="EXIT"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
