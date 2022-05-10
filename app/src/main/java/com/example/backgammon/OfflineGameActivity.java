@@ -5,19 +5,30 @@ import java.util.Random;
 import java.util.Map;
 import java.util.HashMap;
 
+import android.content.Context;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import java.io.*;
 import static java.lang.Math.E;
 import static java.lang.Math.abs;
 import static java.lang.Math.round;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.method.Touch;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebHistoryItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,8 +42,10 @@ import org.w3c.dom.Text;
 
 import java.util.LinkedList;
 
+
 public class OfflineGameActivity extends Activity {
     SecureRandom srandom = new SecureRandom();
+    final String FileName = "Results.txt";
     private int turn = 1;
     private int press = 0;
     private int col_pressed = -1;
@@ -56,7 +69,9 @@ public class OfflineGameActivity extends Activity {
     private boolean is_blue_eaten = false;
     private LinkedList<Piece> blueOut = new LinkedList<>();
     private LinkedList<Piece> redOut = new LinkedList<>();
+    private int whoWon = -1;
     private boolean didGameEnd = false;
+    private boolean saved = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +85,8 @@ public class OfflineGameActivity extends Activity {
         this.diceMap.put(5,R.drawable.dice5);
         this.diceMap.put(6,R.drawable.dice6);
     }
+
+
     public LinkedList<Integer> getIds(){
         LinkedList<Integer> ll = new LinkedList<Integer>();
         ll.add(R.id.rPiece1);
@@ -328,6 +345,10 @@ public class OfflineGameActivity extends Activity {
     public boolean AreThereAnyPossibleMoves(int type) {
         //reminder for myself
         //there is a problem for end game when i roll numbers that i cant move but can get out.
+        if(checkForEndGame(type))
+        {
+            return true;
+        }
         int mult;
         if(type == 1){
             mult = -1;
@@ -336,37 +357,74 @@ public class OfflineGameActivity extends Activity {
         {
             mult = 1;
         }
-        if (this.is_blue_eaten)
+        int count = 0;
+        if (this.is_blue_eaten && this.turn == 1)
         {
-            if(this.game.getAcolumn(25-this.MovePower1).getList().size() <= 1 || this.game.getAcolumn(25-this.MovePower1).getList().size() <= 1)
+            if(this.MovePower1 != 0)
             {
-                return true;
+                if(this.game.getAcolumn(25-this.MovePower1).getList().size() <= 1)
+                {
+                    return true;
+                }
+                else if(this.game.getAcolumn(25-this.MovePower1).getList().getFirst().getType() == 1){
+                    return true;
+                }
+                else
+                {
+                    count++;
+                }
             }
-            else if(this.game.getAcolumn(25-this.MovePower1).getList().getFirst().getType() == 1
-                    || this.game.getAcolumn(25-this.MovePower2).getList().getFirst().getType() == 1)
+            if(this.MovePower2 != 0)
             {
-                return true;
-            }
-            else
-            {
-                return false;
+                if(this.game.getAcolumn(25-this.MovePower2).getList().size() <= 1)
+                {
+                    return true;
+                }
+                else if( this.game.getAcolumn(25-this.MovePower2).getList().getFirst().getType() == 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    count++;
+                }
             }
         }
-        else if (this.is_red_eaten)
+        else if (this.is_red_eaten && this.turn == 0)
         {
-            if(this.game.getAcolumn(this.MovePower1).getList().size() <= 1 || this.game.getAcolumn(this.MovePower1).getList().size() <= 1)
+            if(this.MovePower1 != 0)
             {
-                return true;
+                if(this.game.getAcolumn(this.MovePower1).getList().size() <= 1)
+                {
+                    return true;
+                }
+                else if(this.game.getAcolumn(this.MovePower1).getList().getFirst().getType() == 0){
+                    return true;
+                }
+                else
+                {
+                    count++;
+                }
             }
-            else if(this.game.getAcolumn(this.MovePower1).getList().getFirst().getType() == 0
-                    || this.game.getAcolumn(this.MovePower2).getList().getFirst().getType() == 0)
+            if(this.MovePower2 != 0)
             {
-                return true;
+                if(this.game.getAcolumn(this.MovePower2).getList().size() <= 1)
+                {
+                    return true;
+                }
+                else if( this.game.getAcolumn(this.MovePower2).getList().getFirst().getType() == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    count++;
+                }
             }
-            else
-            {
-                return false;
-            }
+        }
+        if(count > 0)
+        {
+            return false;
         }
         int col1,col2;
         for (int i=0;i<24;i++){
@@ -380,10 +438,12 @@ public class OfflineGameActivity extends Activity {
                     {
                         if(this.game.getAcolumn(col1).getList().size() <= 1)
                         {
+                            System.out.println("wtf:" + col1);
                             return true;
                         }
                         else if(this.game.getAcolumn(col1).getList().getFirst().getType() == type)
                         {
+                            System.out.println("wtf:" + col1);
                             return true;
                         }
                     }
@@ -391,10 +451,12 @@ public class OfflineGameActivity extends Activity {
                     {
                         if(this.game.getAcolumn(col2).getList().size() <= 1)
                         {
+                            System.out.println("wtf:" + col2);
                             return true;
                         }
                         else if(this.game.getAcolumn(col2).getList().getFirst().getType() == type)
                         {
+                            System.out.println("wtf:" + col2);
                             return true;
                         }
                     }
@@ -407,6 +469,8 @@ public class OfflineGameActivity extends Activity {
         if (this.rolled == false){
             int dice1 = Math.abs(srandom.nextInt()%6)+1;
             int dice2 = Math.abs(srandom.nextInt()%6)+1;
+            System.out.println("dice1: "+dice1);
+            System.out.println("dice2: "+dice2);
             if (dice1 == dice2){
                 this.NumOfMoves = 4;
                 this.MovePower1 = dice1;
@@ -420,6 +484,8 @@ public class OfflineGameActivity extends Activity {
             }
             if(!AreThereAnyPossibleMoves(this.turn)){
                 this.turn = Math.abs(this.turn-1);
+                this.MovePower1 = 0;
+                this.MovePower2 = 0;
                 this.NumOfMoves = 0;
             }
             else
@@ -438,8 +504,6 @@ public class OfflineGameActivity extends Activity {
                 imgV6.setVisibility(View.VISIBLE);
                 imgV8.setImageResource(this.diceMap.get(dice2));
                 imgV8.setVisibility(View.VISIBLE);
-                System.out.println("dice1: "+dice1);
-                System.out.println("dice2: "+dice2);
                 if(this.turn == 1 && this.is_blue_eaten)
                 {
                     highlightPossibleColumns(-1);
@@ -531,6 +595,46 @@ public class OfflineGameActivity extends Activity {
         int col1, col2;
         boolean valid1 = false;
         boolean valid2 = false;
+        if(this.turn == 1){
+            if(checkForEndGame(this.turn)) {
+                if(col == this.MovePower1 || col == this.MovePower2)
+                {
+                    ImageView border = findViewById(R.id.outHighlight1);
+                    border.setVisibility(View.VISIBLE);
+                }
+                if (col < this.MovePower1 || col < this.MovePower2) {
+                    boolean flag = true;
+                    for (int i = col + 1; i <= 6; i++) {
+                        if (this.game.getAcolumn(i).getList().size() != 0) {
+                            flag = false;
+                        }
+                    }
+                    if (flag) {
+                        ImageView border = findViewById(R.id.outHighlight1);
+                        border.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        }else{
+            if(checkForEndGame(this.turn)) {
+                if (col == 25 - this.MovePower1 || col == 25 - this.MovePower2) {
+                    ImageView border = findViewById(R.id.outHighlight2);
+                    border.setVisibility(View.VISIBLE);
+                }
+                if (col > 25 - this.MovePower1 || col > 25 - this.MovePower2) {
+                    boolean flag = true;
+                    for (int i = col - 1; i >= 19; i--) {
+                        if (this.game.getAcolumn(i).getList().size() != 0) {
+                            flag = false;
+                        }
+                    }
+                    if (flag) {
+                        ImageView border = findViewById(R.id.outHighlight2);
+                        border.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        }
         if (col == -1)
         {
             col1 = 25-this.MovePower1;
@@ -626,6 +730,10 @@ public class OfflineGameActivity extends Activity {
         }
     }
     public void deHighlightColumns() {
+        ImageView border = findViewById(R.id.outHighlight1);
+        border.setVisibility(View.INVISIBLE);
+        border = findViewById(R.id.outHighlight2);
+        border.setVisibility(View.INVISIBLE);
         ImageView highlight = findViewById(R.id.ColumnHighlihgt1);
         highlight.setVisibility(View.INVISIBLE);
         highlight = findViewById(R.id.ColumnHighlihgt2);
@@ -722,22 +830,35 @@ public class OfflineGameActivity extends Activity {
                     this.game.getAcolumn(col).getList().removeLast();
                     ImageView img = findViewById(p.getId());
                     img.setVisibility(View.INVISIBLE);
-                    if(col < this.MovePower1) {
-                        if (this.NumOfMoves <= 2) {
-                            ImageView img5 = findViewById(R.id.dice5);
-                            ImageView img7 = findViewById(R.id.dice7);
-                            img5.setVisibility(View.INVISIBLE);
-                            img7.setVisibility(View.INVISIBLE);
-                            this.MovePower1 = 0;
-                        }
+                    int move;
+                    boolean flag1 = false;
+                    if(this.MovePower1 > this.MovePower2)
+                    {
+                        move = this.MovePower1;
+                        flag1 = true;
                     }
-                    else {
+                    else
+                    {
+                        flag1 = false;
+                        move = this.MovePower2;
+                    }
+                    if(col < move) {
                         if (this.NumOfMoves <= 2) {
-                            ImageView img6 = findViewById(R.id.dice6);
-                            ImageView img8 = findViewById(R.id.dice8);
-                            img6.setVisibility(View.INVISIBLE);
-                            img8.setVisibility(View.INVISIBLE);
-                            this.MovePower2 = 0;
+                            if(flag1) {
+                                ImageView img5 = findViewById(R.id.dice5);
+                                ImageView img7 = findViewById(R.id.dice7);
+                                img5.setVisibility(View.INVISIBLE);
+                                img7.setVisibility(View.INVISIBLE);
+                                this.MovePower1 = 0;
+                            }
+                            else
+                            {
+                                ImageView img6 = findViewById(R.id.dice6);
+                                ImageView img8 = findViewById(R.id.dice8);
+                                img6.setVisibility(View.INVISIBLE);
+                                img8.setVisibility(View.INVISIBLE);
+                                this.MovePower2 = 0;
+                            }
                         }
                     }
                     return true;
@@ -755,18 +876,22 @@ public class OfflineGameActivity extends Activity {
                 ImageView img = findViewById(p.getId());
                 img.setVisibility(View.INVISIBLE);
                 if(col == 25-this.MovePower1) {
-                    ImageView img5 = findViewById(R.id.dice5);
-                    ImageView img7 = findViewById(R.id.dice7);
-                    img5.setVisibility(View.INVISIBLE);
-                    img7.setVisibility(View.INVISIBLE);
-                    this.MovePower1 = 0;
+                    if (this.NumOfMoves <= 2) {
+                        ImageView img5 = findViewById(R.id.dice5);
+                        ImageView img7 = findViewById(R.id.dice7);
+                        img5.setVisibility(View.INVISIBLE);
+                        img7.setVisibility(View.INVISIBLE);
+                        this.MovePower1 = 0;
+                    }
                 }
                 else {
-                    ImageView img6 = findViewById(R.id.dice6);
-                    ImageView img8 = findViewById(R.id.dice8);
-                    img6.setVisibility(View.INVISIBLE);
-                    img8.setVisibility(View.INVISIBLE);
-                    this.MovePower2 = 0;
+                    if (this.NumOfMoves <= 2) {
+                        ImageView img6 = findViewById(R.id.dice6);
+                        ImageView img8 = findViewById(R.id.dice8);
+                        img6.setVisibility(View.INVISIBLE);
+                        img8.setVisibility(View.INVISIBLE);
+                        this.MovePower2 = 0;
+                    }
                 }
                 return true;
             }
@@ -783,23 +908,40 @@ public class OfflineGameActivity extends Activity {
                 {
                     System.out.println("please3");
                     Piece p = this.game.getAcolumn(col).getList().getLast();
-                    this.blueOut.add(p);
+                    this.redOut.add(p);
                     this.game.getAcolumn(col).getList().removeLast();
                     ImageView img = findViewById(p.getId());
                     img.setVisibility(View.INVISIBLE);
-                    if(col == 25-this.MovePower1) {
-                        ImageView img5 = findViewById(R.id.dice5);
-                        ImageView img7 = findViewById(R.id.dice7);
-                        img5.setVisibility(View.INVISIBLE);
-                        img7.setVisibility(View.INVISIBLE);
-                        this.MovePower1 = 0;
+                    int move;
+                    boolean flag1 = false;
+                    if(this.MovePower1 > this.MovePower2)
+                    {
+                        move = this.MovePower1;
+                        flag1 = true;
                     }
-                    else {
-                        ImageView img6 = findViewById(R.id.dice6);
-                        ImageView img8 = findViewById(R.id.dice8);
-                        img6.setVisibility(View.INVISIBLE);
-                        img8.setVisibility(View.INVISIBLE);
-                        this.MovePower2 = 0;
+                    else
+                    {
+                        flag1 = false;
+                        move = this.MovePower2;
+                    }
+                    if(col > 25-move) {
+                        if (this.NumOfMoves <= 2) {
+                            if(flag1) {
+                                ImageView img5 = findViewById(R.id.dice5);
+                                ImageView img7 = findViewById(R.id.dice7);
+                                img5.setVisibility(View.INVISIBLE);
+                                img7.setVisibility(View.INVISIBLE);
+                                this.MovePower1 = 0;
+                            }
+                            else
+                            {
+                                ImageView img6 = findViewById(R.id.dice6);
+                                ImageView img8 = findViewById(R.id.dice8);
+                                img6.setVisibility(View.INVISIBLE);
+                                img8.setVisibility(View.INVISIBLE);
+                                this.MovePower2 = 0;
+                            }
+                        }
                     }
                     return true;
                 }
@@ -808,9 +950,12 @@ public class OfflineGameActivity extends Activity {
         return false;
     }
     public boolean checkIfGameEnded(int type) {
+        System.out.println("blabla: "+type);
         if (type == 1){
+            System.out.println(blueOut.size());
             if (this.blueOut.size() == 15)
             {
+                this.whoWon = 1;
                 return true;
             }
             else
@@ -819,8 +964,10 @@ public class OfflineGameActivity extends Activity {
             }
         }
         else{
+            System.out.println(redOut.size());
             if (this.redOut.size() == 15)
             {
+                this.whoWon = 0;
                 return true;
             }
             else
@@ -874,9 +1021,102 @@ public class OfflineGameActivity extends Activity {
         txtview.setVisibility(View.VISIBLE);
         button1.setVisibility(View.VISIBLE);
         button2.setVisibility(View.VISIBLE);
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 500 milliseconds
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            //deprecated in API 26
+            v.vibrate(300);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 0:
+                writeFile();
+        }
+    }
+    public String readFile() {
+        StringBuilder text = new StringBuilder();
+        try{
+            File root = new File(Environment.getExternalStorageDirectory(), "Files");
+            if (!root.exists()) {
+                root.mkdir();
+            }
+            File file = new File(root,this.FileName);
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            while((line = br.readLine()) != null)
+            {
+                text.append(line);
+                text.append("\n");
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("here: ");
+        System.out.println(text.toString());
+        return text.toString();
     }
     public void saveResult(View view) {
+        if (this.saved == false) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                writeFile();
+            } else {
+                // Request permission from the user
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+            }
+            this.saved = true;
+        }
+    }
+    public void writeFile(){
 
+        String sBody = readFile();
+        sBody += Integer.toString(this.whoWon);
+        sBody += "#";
+        if(this.whoWon == 1){
+            sBody += Integer.toString(15-this.redOut.size());
+        }
+        else {
+            sBody += Integer.toString(15-this.blueOut.size());
+        }
+        sBody += "\n";
+        try{
+            File root = new File(Environment.getExternalStorageDirectory(), "Files");
+            if (!root.exists()) {
+                root.mkdir();
+            }
+            File gpxfile = new File(root, this.FileName);
+            FileWriter writer = new FileWriter(gpxfile);
+            writer.append(sBody);
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        StringBuilder text = new StringBuilder();
+        try{
+            File root = new File(Environment.getExternalStorageDirectory(), "Files");
+            if (!root.exists()) {
+                root.mkdir();
+            }
+            File file = new File(root,this.FileName);
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            while((line = br.readLine()) != null)
+            {
+                text.append(line);
+                text.append("\n");
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("here: ");
+        System.out.println(text.toString());
     }
     public void exitActivity(View view) {
         finish();
@@ -918,15 +1158,15 @@ public class OfflineGameActivity extends Activity {
                                         boolean flag = endGameMove(this.col_pressed);
                                         if (flag){
                                             this.NumOfMoves--;
-                                            if (this.NumOfMoves == 0) {
-                                                this.turn = Math.abs(this.turn - 1);
-                                                System.out.println(this.turn);
-                                            }
                                         }
                                         if (checkIfGameEnded(this.turn)) {
                                             this.didGameEnd = true;
                                             EndTheGame(this.turn);
                                         }
+                                    }
+                                    if (this.NumOfMoves == 0) {
+                                        this.turn = Math.abs(this.turn - 1);
+                                        System.out.println(this.turn);
                                     }
                                 }
                             } else {
@@ -963,6 +1203,14 @@ public class OfflineGameActivity extends Activity {
                         this.rolled = false;
                         Button button1 = findViewById(R.id.roll1);
                         button1.setBackgroundResource(R.drawable.reddice);
+                    }
+                    else {
+                        System.out.println("oops0");
+                        if (!AreThereAnyPossibleMoves(this.turn)) {
+                            System.out.println("oops1");
+                            this.turn = Math.abs(this.turn - 1);
+                            this.NumOfMoves = 0;
+                        }
                     }
             }
         }

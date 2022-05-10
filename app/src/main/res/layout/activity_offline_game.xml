@@ -28,6 +28,8 @@
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="invisible"/>
 
+
+
     <ImageView
         android:id="@+id/ColumnHighlihgt2"
         android:layout_width="130px"
@@ -56,6 +58,28 @@
         android:layout_marginStart="416dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/highlightcolumnup"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/outHighlight1"
+        android:layout_width="137px"
+        android:layout_height="407px"
+        android:layout_marginStart="1926px"
+        android:layout_marginTop="240dp"
+        android:src="@drawable/greenborder"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/outHighlight2"
+        android:layout_width="137px"
+        android:layout_height="407px"
+        android:layout_marginStart="1926px"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/greenborder"
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -437,7 +461,7 @@
         android:layout_width="240px"
         android:layout_height="120px"
         android:layout_marginTop="232dp"
-        android:layout_marginEnd="308dp"
+        android:layout_marginEnd="300dp"
         android:background="@drawable/blackbackground"
         android:onClick="saveResult"
         android:text="SAVE"
@@ -451,7 +475,7 @@
         android:layout_width="240px"
         android:layout_height="120px"
         android:layout_marginTop="232dp"
-        android:layout_marginEnd="400dp"
+        android:layout_marginEnd="408dp"
         android:background="@drawable/blackbackground"
         android:onClick="exitActivity"
         android:text="EXIT"
