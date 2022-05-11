@@ -75,10 +75,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void onClick2(View view) {
-
-    }
-
     public void matchLogShow(View view) {
         Intent intent = new Intent(this, ShowResultsActivity.class);
         startActivity(intent);
@@ -87,8 +83,5 @@ public class MainActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(this, ShowRulesActivity.class);
         startActivity(intent);
-    }
-    public void exitActivity(View view) {
-        finish();
     }
 }
