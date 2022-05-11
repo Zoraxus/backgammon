@@ -58,6 +58,12 @@ public class OfflineGameActivity extends Activity {
             {{1091,38},{1220,480}},{{1221,38},{1350,480}},{{1351,38},{1480,480}},{{1481,38},{1610,480}},{{1611,38},{1740,480}},{{1741,38},{1870,480}}};
     private int[][] blueEaten = new int[][]{{1007,535},{1007,615},{1007,695},{1007,775},{1007,855},{1007,935}};
     private int[][] redEaten = new int[][]{{1007,455},{1007,375},{1007,295},{1007,215},{1007,135},{1007,55}};
+    private int[] bluePieceOutID = new int[]{R.id.outpieceblue1,R.id.outpieceblue2,R.id.outpieceblue3,R.id.outpieceblue4,R.id.outpieceblue5,
+            R.id.outpieceblue6,R.id.outpieceblue7,R.id.outpieceblue8,R.id.outpieceblue9,R.id.outpieceblue10,
+            R.id.outpieceblue11,R.id.outpieceblue12,R.id.outpieceblue13,R.id.outpieceblue14,R.id.outpieceblue15};
+    private int[] redPieceOutID = new int[]{R.id.outpiecered1,R.id.outpiecered2,R.id.outpiecered3,R.id.outpiecered4,R.id.outpiecered5,
+            R.id.outpiecered6,R.id.outpiecered7,R.id.outpiecered8,R.id.outpiecered9,R.id.outpiecered10,
+            R.id.outpiecered11,R.id.outpiecered12,R.id.outpiecered13,R.id.outpiecered14,R.id.outpiecered15};
     private Game game;
     private boolean rolled = false;
     private Map<Integer,Integer> diceMap = new HashMap<Integer, Integer>() {};
@@ -791,6 +797,8 @@ public class OfflineGameActivity extends Activity {
                 Piece p = this.game.getAcolumn(col).getList().getLast();
                 this.blueOut.add(p);
                 this.game.getAcolumn(col).getList().removeLast();
+                ImageView bluepieceout = findViewById(this.bluePieceOutID[this.blueOut.size()-1]);
+                bluepieceout.setVisibility(View.VISIBLE);
                 ImageView img = findViewById(p.getId());
                 img.setVisibility(View.INVISIBLE);
                 if(col == this.MovePower1) {
@@ -828,6 +836,8 @@ public class OfflineGameActivity extends Activity {
                     Piece p = this.game.getAcolumn(col).getList().getLast();
                     this.blueOut.add(p);
                     this.game.getAcolumn(col).getList().removeLast();
+                    ImageView bluepieceout = findViewById(this.bluePieceOutID[this.blueOut.size()-1]);
+                    bluepieceout.setVisibility(View.VISIBLE);
                     ImageView img = findViewById(p.getId());
                     img.setVisibility(View.INVISIBLE);
                     int move;
@@ -873,6 +883,8 @@ public class OfflineGameActivity extends Activity {
                 Piece p = this.game.getAcolumn(col).getList().getLast();
                 this.redOut.add(p);
                 this.game.getAcolumn(col).getList().removeLast();
+                ImageView redpieceout = findViewById(this.redPieceOutID[this.redOut.size()-1]);
+                redpieceout.setVisibility(View.VISIBLE);
                 ImageView img = findViewById(p.getId());
                 img.setVisibility(View.INVISIBLE);
                 if(col == 25-this.MovePower1) {
@@ -910,6 +922,8 @@ public class OfflineGameActivity extends Activity {
                     Piece p = this.game.getAcolumn(col).getList().getLast();
                     this.redOut.add(p);
                     this.game.getAcolumn(col).getList().removeLast();
+                    ImageView redpieceout = findViewById(this.redPieceOutID[this.redOut.size()-1]);
+                    redpieceout.setVisibility(View.VISIBLE);
                     ImageView img = findViewById(p.getId());
                     img.setVisibility(View.INVISIBLE);
                     int move;

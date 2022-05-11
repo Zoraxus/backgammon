@@ -51,5 +51,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.819" />
 
+    <Button
+        android:id="@+id/rules"
+        android:layout_width="183dp"
+        android:layout_height="84dp"
+        android:backgroundTint="@color/white"
+        android:onClick="ShowRules"
+        android:text="How to play"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.109"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.819" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

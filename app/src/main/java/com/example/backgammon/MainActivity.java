@@ -49,9 +49,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    public void openProfilePage() {
-        Toast.makeText(this,"open profile selected!",Toast.LENGTH_SHORT);
-    }
     @Override
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -86,7 +83,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ShowResultsActivity.class);
         startActivity(intent);
     }
-
+    public void ShowRules(View view)
+    {
+        Intent intent = new Intent(this, ShowRulesActivity.class);
+        startActivity(intent);
+    }
     public void exitActivity(View view) {
         finish();
     }
