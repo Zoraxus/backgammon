@@ -5,7 +5,12 @@ import java.util.Random;
 import java.util.Map;
 import java.util.HashMap;
 
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -28,8 +33,10 @@ import android.os.Environment;
 import android.text.method.Touch;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.webkit.WebHistoryItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,13 +52,15 @@ import java.util.LinkedList;
 
 public class OfflineGameActivity extends Activity {
     SecureRandom srandom = new SecureRandom();
-    final String FileName = "Results.txt";
+    final private String FileName = "gameResults.txt";
+    public String name_player_1 = "";
+    public String name_player_2 = "";
     private int turn = 1;
     private int press = 0;
     private int col_pressed = -1;
     private int[] piecesPosBottom = new int[] {960,880,800,720,640,920,840,760,680};
     private int[] piecesPosTop = new int[] {37,117,197,277,357,77,157,237,317};
-    public int[][][] columnsPos = new int[][][] {
+    private int[][][] columnsPos = new int[][][] {
             {{1869,1040},{1740,600}},{{1739,1040},{1610,600}},{{1609,1040},{1480,600}},{{1479,1040},{1350,600}},{{1349,1040},{1220,600}},{{1219,1040},{1090,600}},
             {{999,1040},{870,600}},{{869,1040},{740,600}},{{739,1040},{610,600}},{{609,1040},{480,600}},{{479,1040},{350,600}},{{349,1040},{220,600}},
             {{221,38},{350,480}},{{351,38},{480,480}},{{481,38},{610,480}},{{611,38},{740,480}},{{741,38},{870,480}},{{871,38},{1000,480}},
@@ -67,7 +76,6 @@ public class OfflineGameActivity extends Activity {
     private Game game;
     private boolean rolled = false;
     private Map<Integer,Integer> diceMap = new HashMap<Integer, Integer>() {};
-    private int [] rolls = new int[2];
     private int NumOfMoves = 0;
     private int MovePower1 = 0;
     private int MovePower2 = 0;
@@ -77,7 +85,7 @@ public class OfflineGameActivity extends Activity {
     private LinkedList<Piece> redOut = new LinkedList<>();
     private int whoWon = -1;
     private boolean didGameEnd = false;
-    private boolean saved = false;
+    private BroadcastReceiver mReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,9 +98,79 @@ public class OfflineGameActivity extends Activity {
         this.diceMap.put(4,R.drawable.dice4);
         this.diceMap.put(5,R.drawable.dice5);
         this.diceMap.put(6,R.drawable.dice6);
+        this.mReceiver = new OfflineGameActivity.BatteryBroadcastReceiver();
+        showStartDialog();
     }
+    public void showStartDialog(){
+        final Dialog dialog = new Dialog(OfflineGameActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.get_names_dialog);
+        final EditText name1Et = dialog.findViewById(R.id.name1);
+        final EditText name2Et = dialog.findViewById(R.id.name2);
 
+        Button startButton = dialog.findViewById(R.id.start_button);
+        Button cancelButton = dialog.findViewById(R.id.cancel_button);
 
+        startButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+            public void onClick(View view)
+           {
+               name_player_1 = name1Et.getText().toString();
+               name_player_2 = name2Et.getText().toString();
+               if(name_player_1.length() > 6)
+               {
+                   Context context = getApplicationContext();
+                   Toast toast = Toast.makeText(context, "Max Name Length 6.", Toast.LENGTH_SHORT);
+                   toast.show();
+               }
+               else {
+                   dialog.dismiss();
+               }
+           }
+        });
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                dialog.dismiss();
+                finish();
+            }
+        });
+        dialog.show();
+    }
+    private class BatteryBroadcastReceiver extends BroadcastReceiver {
+        private boolean isLow = false;
+        private final static String BATTERY_LEVEL = "level";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+            Intent batteryStatus = context.registerReceiver(null, ifilter);
+            int level = intent.getIntExtra(BATTERY_LEVEL, 0);
+            int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+            boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                    status == BatteryManager.BATTERY_STATUS_FULL;
+            if(!isCharging && level <= 15 && !this.isLow) {
+                this.isLow = true;
+                Toast toast = Toast.makeText(context, "Low Battery Alert!", Toast.LENGTH_LONG);
+                toast.show();
+            }
+            else{
+                this.isLow = false;
+            }
+        }
+    }
+    @Override
+    protected void onStart() {
+        registerReceiver(this.mReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        super.onStart();
+    }
+    @Override
+    protected void onStop() {
+        unregisterReceiver(this.mReceiver);
+        super.onStop();
+    }
     public LinkedList<Integer> getIds(){
         LinkedList<Integer> ll = new LinkedList<Integer>();
         ll.add(R.id.rPiece1);
@@ -129,18 +207,18 @@ public class OfflineGameActivity extends Activity {
     }
     public int findColumn(int x,int y) {
         int columnNum = -1;
-        for (int i=0;i<columnsPos.length;i++){
-            if (i < columnsPos.length/2){
-                if (x <= columnsPos[i][0][0] && x >= columnsPos[i][1][0]){
-                    if (y <= columnsPos[i][0][1] && y >= columnsPos[i][1][1]){
+        for (int i=0;i<this.columnsPos.length;i++){
+            if (i < this.columnsPos.length/2){
+                if (x <= this.columnsPos[i][0][0] && x >= this.columnsPos[i][1][0]){
+                    if (y <= this.columnsPos[i][0][1] && y >= this.columnsPos[i][1][1]){
                         columnNum = i+1;
                         break;
                     }
                 }
             }
             else{
-                if (x >= columnsPos[i][0][0] && x <= columnsPos[i][1][0]){
-                    if (y >= columnsPos[i][0][1] && y <= columnsPos[i][1][1]){
+                if (x >= this.columnsPos[i][0][0] && x <= this.columnsPos[i][1][0]){
+                    if (y >= this.columnsPos[i][0][1] && y <= this.columnsPos[i][1][1]){
                         columnNum = i+1;
                         break;
                     }
@@ -530,7 +608,6 @@ public class OfflineGameActivity extends Activity {
             }
         }
     }
-    public void highlightMid(int type){};
     public void GetOutOfEat(int midType, int col){
         if(midType == -1){
             if (this.game.getAcolumn(col).getList().size() == 0 || this.game.getAcolumn(col).getList().getFirst().getType() == 1){
@@ -1075,21 +1152,27 @@ public class OfflineGameActivity extends Activity {
         return text.toString();
     }
     public void saveResult(View view) {
-        if (this.saved == false) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                writeFile();
-            } else {
-                // Request permission from the user
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-            }
-            this.saved = true;
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            writeFile();
+        } else {
+            // Request permission from the user
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
+        finish();
     }
     public void writeFile(){
 
         String sBody = readFile();
-        sBody += Integer.toString(this.whoWon);
+        if (this.whoWon == 1) {
+            sBody += name_player_1;
+            sBody += "#";
+            sBody += name_player_2;
+        } else {
+            sBody += name_player_2;
+            sBody += "#";
+            sBody += name_player_1;
+        }
         sBody += "#";
         if(this.whoWon == 1){
             sBody += Integer.toString(15-this.redOut.size());
@@ -1149,11 +1232,9 @@ public class OfflineGameActivity extends Activity {
                                 if (this.is_blue_eaten && this.turn == 1) {
                                     this.press = 1;
                                     this.col_pressed = -1;
-                                    this.highlightMid(1);
                                 } else if (this.is_red_eaten && this.turn == 0) {
                                     this.press = 1;
                                     this.col_pressed = -2;
-                                    this.highlightMid(1);
                                 } else if (!CheckIfColumnIsEmpty(col)) {
                                     if (this.game.getAcolumn(col).getList().get(0).getType() == this.turn) {
                                         this.press = 1;

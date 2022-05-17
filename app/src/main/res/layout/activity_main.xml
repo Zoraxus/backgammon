@@ -39,7 +39,7 @@
 
     <Button
         android:id="@+id/rules"
-        android:layout_width="183dp"
+        android:layout_width="173dp"
         android:layout_height="84dp"
         android:backgroundTint="@color/white"
         android:onClick="ShowRules"
@@ -48,10 +48,9 @@
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.804" />
+        app:layout_constraintVertical_bias="0.81" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

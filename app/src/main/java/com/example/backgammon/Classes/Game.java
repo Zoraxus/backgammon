@@ -7,7 +7,7 @@ public class Game {
     public Game(int[][][] pos,LinkedList<Integer> ll){
         this.columns = new Column[24];
         for (int i=0;i< pos.length;i++){
-            Column column = new Column(pos[i],i+1);
+            Column column = new Column();
             this.columns[i] = column;
         }
         boardSetUp(ll);
@@ -65,6 +65,7 @@ public class Game {
     public Column getAcolumn(int index){
         return this.columns[index-1];
     }
+
     private Column[] columns;
     private LinkedList<Piece> RedEaten = new LinkedList<>();
     private LinkedList<Piece> BLueEaten = new LinkedList<>();
