@@ -10,6 +10,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.VibrationEffect;
@@ -86,20 +90,46 @@ public class OfflineGameActivity extends Activity {
     private int whoWon = -1;
     private boolean didGameEnd = false;
     private BroadcastReceiver mReceiver;
+    private SensorManager sensorManager;
+    private Sensor sensorLight;
+    private boolean isDark = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offline_game);
         LinkedList<Integer> ll = getIds();
-        this.game = new Game(this.columnsPos,ll);
-        this.diceMap.put(1,R.drawable.dice1);
-        this.diceMap.put(2,R.drawable.dice2);
-        this.diceMap.put(3,R.drawable.dice3);
-        this.diceMap.put(4,R.drawable.dice4);
-        this.diceMap.put(5,R.drawable.dice5);
-        this.diceMap.put(6,R.drawable.dice6);
+        this.game = new Game(this.columnsPos, ll);
+        this.diceMap.put(1, R.drawable.dice1);
+        this.diceMap.put(2, R.drawable.dice2);
+        this.diceMap.put(3, R.drawable.dice3);
+        this.diceMap.put(4, R.drawable.dice4);
+        this.diceMap.put(5, R.drawable.dice5);
+        this.diceMap.put(6, R.drawable.dice6);
         this.mReceiver = new OfflineGameActivity.BatteryBroadcastReceiver();
         showStartDialog();
+        this.sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        this.sensorLight = this.sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+
+        SensorEventListener sensorEventListenerLight = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent sensorEvent) {
+                float lux = sensorEvent.values[0];
+                if (lux < 10 && !isDark) {
+                    Context context = getApplicationContext();
+                    Toast toast = Toast.makeText(context, "It's Dark, Lower your phone brightness", Toast.LENGTH_SHORT);
+                    toast.show();
+                    isDark = true;
+                } else {
+                    isDark = false;
+                }
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int i) {
+
+            }
+        };
+        this.sensorManager.registerListener(sensorEventListenerLight, this.sensorLight, sensorManager.SENSOR_DELAY_NORMAL);
     }
     public void showStartDialog(){
         final Dialog dialog = new Dialog(OfflineGameActivity.this);

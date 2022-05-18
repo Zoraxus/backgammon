@@ -14,6 +14,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,6 +35,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 public class MainActivity extends AppCompatActivity {
+    private SensorManager sensorManager;
+    private Sensor sensorLight;
+    private boolean isDark = false;
     private BroadcastReceiver mReceiver;
     private class BatteryBroadcastReceiver extends BroadcastReceiver {
         private boolean isLow = false;
@@ -66,6 +73,34 @@ public class MainActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
         this.mReceiver = new BatteryBroadcastReceiver();
+
+        this.sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        this.sensorLight = this.sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+
+        SensorEventListener sensorEventListenerLight = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent sensorEvent) {
+                float lux = sensorEvent.values[0];
+                if(lux < 10 && !isDark)
+                {
+                    Context context = getApplicationContext();
+                    Toast toast = Toast.makeText(context, "It's Dark, Lower your phone brightness", Toast.LENGTH_SHORT);
+                    toast.show();
+                    isDark = true;
+                }
+                else
+                {
+                    isDark = false;
+                }
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int i) {
+
+            }
+        };
+        this.sensorManager.registerListener(sensorEventListenerLight,this.sensorLight,sensorManager.SENSOR_DELAY_NORMAL);
+
     }
     @Override
     protected void onStart() {
