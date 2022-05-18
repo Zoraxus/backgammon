@@ -18,6 +18,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -35,6 +37,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 public class MainActivity extends AppCompatActivity {
+    private boolean isAudioOn = true;
     private SensorManager sensorManager;
     private Sensor sensorLight;
     private boolean isDark = false;
@@ -65,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        startService(new Intent(this, MyService.class));
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             Log.d("READ PREMITION","success");
         } else {
@@ -105,12 +111,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         registerReceiver(this.mReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        startService(new Intent(this, MyService.class));
         super.onStart();
     }
 
     @Override
     protected void onStop() {
         unregisterReceiver(this.mReceiver);
+        stopService(new Intent(this, MyService.class));
         super.onStop();
     }
     @Override
@@ -158,16 +166,35 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
     public void onClick1(View view) {
+        stopService(new Intent(this, MyService.class));
         Intent intent = new Intent(this, OfflineGameActivity.class);
         startActivity(intent);
 
     }
     public void matchLogShow(View view) {
+        stopService(new Intent(this, MyService.class));
         Intent intent = new Intent(this, ShowResultsActivity.class);
         startActivity(intent);
     }
     public void ShowRules(View view) {
+        stopService(new Intent(this, MyService.class));
         Intent intent = new Intent(this, ShowRulesActivity.class);
         startActivity(intent);
+    }
+    public void changeAudioState(View view)
+    {
+        if(this.isAudioOn)
+        {
+            this.isAudioOn = false;
+            stopService(new Intent(this, MyService.class));
+            Button button = findViewById(R.id.musicState);
+            button.setBackgroundResource(R.drawable.volumeoff);
+        }
+        else{
+            this.isAudioOn = true;
+            startService(new Intent(this, MyService.class));
+            Button button = findViewById(R.id.musicState);
+            button.setBackgroundResource(R.drawable.volumeon);
+        }
     }
 }
