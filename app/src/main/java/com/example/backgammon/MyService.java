@@ -13,12 +13,23 @@ public class MyService extends Service {
     private MediaPlayer player;
     @Nullable
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(Intent intent) { // i don't use this function
+        /*
+        this function is called when you bind the Service
+        param: intent : Intent
+        return: null
+        */
         return null;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        /*
+        this function will run when the Service starts and it will start a media player which will
+        play music in loop until stopped
+        param: intent : Intent, flags : int, startId : int
+        return: int
+        */
         player = MediaPlayer.create(this,R.raw.backgroundaudio);
         player.setLooping(true);
         player.start();
@@ -27,6 +38,11 @@ public class MyService extends Service {
 
     @Override
     public void onDestroy() {
+        /*
+        this function will run on the distraction of this Service and will stop the media player
+        param: none
+        return: void
+        */
         super.onDestroy();
         player.stop();
     }

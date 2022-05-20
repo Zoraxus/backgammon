@@ -48,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            /*
+            this function will run when the phone sends a broadcast and will show user an alert
+            param: context : Context , intent : Intent
+            return: void
+            */
             IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
             Intent batteryStatus = context.registerReceiver(null, ifilter);
             int level = intent.getIntExtra(BATTERY_LEVEL, 0);
@@ -66,13 +71,16 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /*
+        this function will run when the activity is created and will create broadcastReceiver, sensor,
+        ask for permission.
+        param: saveInstanceState : Bundle
+        return: void
+        */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        startService(new Intent(this, MyService.class));
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            Log.d("READ PREMITION","success");
+            Log.d("WRITE PERMISSION","success");
         } else {
             // Request permission from the user
             ActivityCompat.requestPermissions(this,
@@ -86,8 +94,13 @@ public class MainActivity extends AppCompatActivity {
         SensorEventListener sensorEventListenerLight = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent sensorEvent) {
+                /*
+                this function will run when the lightSensor level changed
+                param: sensorEvent : SensorEvent
+                return:void
+                */
                 float lux = sensorEvent.values[0];
-                if(lux < 10 && !isDark)
+                if(lux < 2 && !isDark)
                 {
                     Context context = getApplicationContext();
                     Toast toast = Toast.makeText(context, "It's Dark, Lower your phone brightness", Toast.LENGTH_SHORT);
@@ -101,36 +114,58 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onAccuracyChanged(Sensor sensor, int i) {
-
-            }
+            public void onAccuracyChanged(Sensor sensor, int i) {} // i don't use this one.
         };
         this.sensorManager.registerListener(sensorEventListenerLight,this.sensorLight,sensorManager.SENSOR_DELAY_NORMAL);
 
     }
     @Override
     protected void onStart() {
+        /*
+        this function will run when the activity is the one shown, will start the broadcast receiver,
+        the music Service and will set the layout.
+        param: none
+        return: void
+        */
         registerReceiver(this.mReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-        startService(new Intent(this, MyService.class));
+        if(isAudioOn) {
+            startService(new Intent(getApplicationContext(), MyService.class));
+        }
         super.onStart();
     }
 
     @Override
     protected void onStop() {
+        /*
+        this function will run when the activity stops to be shown, will stop the broadcast receiver
+        and the music Service.
+        param: none
+        return: void
+        */
         unregisterReceiver(this.mReceiver);
-        stopService(new Intent(this, MyService.class));
+        stopService(new Intent(getApplicationContext(), MyService.class));
         super.onStop();
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        /*
+        this function will run after permission has been requested
+        param: requestCode : int , permissions : String[] , grantResults : int[]
+        return: void
+        */
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case 0:
-                Log.d("READ PREMITION", "success");
+                Log.d("WRITE PERMISSION", "success");
         }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        /*
+        this function will start the menu on the activity
+        param: menu : Menu
+        return: boolean
+        */
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.mymenu,menu);
         return true;
@@ -138,6 +173,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        /*
+        this function will handle menu options selected
+        param: item : MenuItem
+        return: boolean
+        */
         switch (item.getItemId()){
             case R.id.item1:
                 onBackPressed();
@@ -147,6 +187,11 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
+        /*
+        this function will handle back button pressed
+        param: none
+        return: void
+        */
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setMessage("Do you want to exit ?");
         builder.setCancelable(false);
@@ -154,45 +199,81 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
+                /*
+                this function will handle if the user pressed exit->yes.
+                param: dialog : DialogInterface , which : int
+                return: void
+                */
                 finish();
             }});
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
+                /*
+                this function will handle if the user pressed exit->no.
+                param: dialog : DialogInterface , which : int
+                return: void
+                */
                 dialog.cancel();
             }});
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-    public void onClick1(View view) {
-        stopService(new Intent(this, MyService.class));
+    public void startGame(View view) {
+        /*
+        this function will handle what happens if the user pressed new offline game button
+        param: view : View
+        return: void
+        */
         Intent intent = new Intent(this, OfflineGameActivity.class);
         startActivity(intent);
+        if (isAudioOn) {
+            stopService(new Intent(getApplicationContext(), MyService.class));
+        }
 
     }
     public void matchLogShow(View view) {
-        stopService(new Intent(this, MyService.class));
+        /*
+        this function will handle what happens if the user pressed the show mach log button
+        param: view : View
+        return: void
+        */
         Intent intent = new Intent(this, ShowResultsActivity.class);
         startActivity(intent);
+        if (isAudioOn) {
+            stopService(new Intent(getApplicationContext(), MyService.class));
+        }
     }
     public void ShowRules(View view) {
-        stopService(new Intent(this, MyService.class));
+        /*
+        this function will handle what happens if the user pressed show rules button
+        param: view : View
+        return: void
+        */
         Intent intent = new Intent(this, ShowRulesActivity.class);
         startActivity(intent);
+        if (isAudioOn) {
+            stopService(new Intent(getApplicationContext(), MyService.class));
+        }
     }
-    public void changeAudioState(View view)
-    {
+    public void changeAudioState(View view) {
+        /*
+        this function will handle what happens if the user pressed the audio button
+        param: view : View
+        return: void
+        */
+        System.out.println(isAudioOn);
         if(this.isAudioOn)
         {
             this.isAudioOn = false;
-            stopService(new Intent(this, MyService.class));
             Button button = findViewById(R.id.musicState);
             button.setBackgroundResource(R.drawable.volumeoff);
+            stopService(new Intent(getApplicationContext(), MyService.class));
         }
         else{
             this.isAudioOn = true;
-            startService(new Intent(this, MyService.class));
+            startService(new Intent(getApplicationContext(), MyService.class));
             Button button = findViewById(R.id.musicState);
             button.setBackgroundResource(R.drawable.volumeon);
         }

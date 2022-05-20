@@ -33,7 +33,7 @@
         android:layout_width="173dp"
         android:layout_height="84dp"
         android:backgroundTint="@color/white"
-        android:onClick="onClick1"
+        android:onClick="startGame"
         android:text="New Game Offline"
         android:textColor="@color/black"
         android:textSize="20dp"

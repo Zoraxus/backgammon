@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="2094px"
@@ -7,13 +7,41 @@
     android:background="@drawable/backgammonbackground1"
     tools:context=".OfflineGameActivity">
 
+    <TextView
+        android:id="@+id/redName"
+        android:layout_width="137px"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="734dp"
+        android:layout_marginTop="392dp"
+        android:text="T"
+        android:textColor="#D51919"
+        android:textSize="40px"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+    <TextView
+        android:id="@+id/blueName"
+        android:layout_width="137px"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="734dp"
+        android:layout_marginTop="1dp"
+        android:text="T"
+        android:textColor="#00E2FF"
+        android:gravity="center"
+        android:textSize="40px"
+        android:rotation="180"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+
     <ImageView
         android:id="@+id/turnArrow"
         android:layout_width="120px"
         android:layout_height="120px"
         android:layout_marginStart="736dp"
         android:layout_marginTop="180dp"
-        android:src="@drawable/bluearrowdown"
+        android:src="@drawable/bluearrow"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -63,7 +91,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/outHighlight1"
+        android:id="@+id/outHighlight2"
         android:layout_width="137px"
         android:layout_height="407px"
         android:layout_marginStart="1926px"
@@ -74,7 +102,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/outHighlight2"
+        android:id="@+id/outHighlight1"
         android:layout_width="137px"
         android:layout_height="407px"
         android:layout_marginStart="1926px"
@@ -84,18 +112,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <Button
         android:id="@+id/roll1"
         android:layout_width="120px"
         android:layout_height="120px"
-        android:layout_marginTop="180dp"
-        android:layout_marginEnd="736dp"
+        android:layout_marginStart="40px"
+        android:layout_marginTop="182dp"
         android:background="@drawable/reddice"
         android:onClick="RollDice"
-        android:text="ROLL"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        android:text="ROLL" />
 
     <ImageView
         android:id="@+id/dice5"
@@ -143,292 +169,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/bPiece1"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="1117px"
-        android:layout_marginTop="960px"
-        android:src="@drawable/bluepiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/bPiece2"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="1117px"
-        android:layout_marginTop="880px"
-        android:src="@drawable/bluepiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/bPiece3"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="1117px"
-        android:layout_marginTop="800px"
-        android:src="@drawable/bluepiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/bPiece4"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="1117px"
-        android:layout_marginTop="720px"
-        android:src="@drawable/bluepiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/bPiece5"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="1117px"
-        android:layout_marginTop="640px"
-        android:src="@drawable/bluepiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/bPiece9"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="247px"
-        android:layout_marginTop="37px"
-        android:src="@drawable/bluepiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/bPiece10"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="247px"
-        android:layout_marginTop="117px"
-        android:src="@drawable/bluepiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/bPiece11"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="247px"
-        android:layout_marginTop="197px"
-        android:src="@drawable/bluepiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/bPiece13"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="247px"
-        android:layout_marginTop="357px"
-        android:src="@drawable/bluepiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/bPiece12"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="247px"
-        android:layout_marginTop="277px"
-        android:src="@drawable/bluepiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/rPiece4"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="247px"
-        android:layout_marginTop="880px"
-        android:src="@drawable/redpiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/rPiece5"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="247px"
-        android:layout_marginTop="800px"
-        android:src="@drawable/redpiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/rPiece7"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="247px"
-        android:layout_marginTop="640px"
-        android:src="@drawable/redpiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/rPiece3"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="94dp"
-        android:layout_marginTop="960px"
-        android:layout_marginEnd="11dp"
-        android:src="@drawable/redpiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/rPiece6"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="247px"
-        android:layout_marginTop="720px"
-        android:src="@drawable/redpiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <ImageView
-        android:id="@+id/bPiece6"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="767px"
-        android:layout_marginTop="960px"
-        android:src="@drawable/bluepiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/bPiece7"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="767px"
-        android:layout_marginTop="880px"
-        android:src="@drawable/bluepiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/bPiece8"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="767px"
-        android:layout_marginTop="800px"
-        android:src="@drawable/bluepiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/bPiece14"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="1767px"
-        android:layout_marginTop="37px"
-        android:src="@drawable/bluepiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/bPiece15"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="1767px"
-        android:layout_marginTop="117px"
-        android:src="@drawable/bluepiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/rPiece11"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="1117px"
-        android:layout_marginTop="37px"
-        android:src="@drawable/redpiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/rPiece12"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="1117px"
-        android:layout_marginTop="117px"
-        android:src="@drawable/redpiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/rPiece13"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="1117px"
-        android:layout_marginTop="197px"
-        android:src="@drawable/redpiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/rPiece14"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="1117px"
-        android:layout_marginTop="277px"
-        android:src="@drawable/redpiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/rPiece15"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="1117px"
-        android:layout_marginTop="357px"
-        android:src="@drawable/redpiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/rPiece8"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="767px"
-        android:layout_marginTop="37px"
-        android:src="@drawable/redpiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/rPiece9"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="767px"
-        android:layout_marginTop="117px"
-        android:src="@drawable/redpiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/rPiece10"
-        android:layout_width="80px"
-        android:layout_height="80px"
-        android:layout_marginStart="767px"
-        android:layout_marginTop="197px"
-        android:src="@drawable/redpiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
         android:id="@+id/rPiece1"
         android:layout_width="80px"
         android:layout_height="80px"
-        android:layout_marginStart="1767px"
+        android:layout_marginStart="1117px"
         android:layout_marginTop="960px"
         android:src="@drawable/redpiece"
         app:layout_constraintStart_toStartOf="parent"
@@ -438,169 +182,300 @@
         android:id="@+id/rPiece2"
         android:layout_width="80px"
         android:layout_height="80px"
-        android:layout_marginStart="1767px"
+        android:layout_marginStart="1117px"
         android:layout_marginTop="880px"
         android:src="@drawable/redpiece"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/outpiecered1"
-        android:layout_width="137px"
-        android:layout_height="26px"
-        android:layout_marginStart="733dp"
-        android:layout_marginTop="48px"
-        android:src="@drawable/outredpiece"
+        android:id="@+id/rPiece3"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="1117px"
+        android:layout_marginTop="800px"
+        android:src="@drawable/redpiece"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
-        android:id="@+id/outpiecered2"
-        android:layout_width="137px"
-        android:layout_height="26px"
-        android:layout_marginStart="733dp"
-        android:layout_marginTop="74px"
-        android:src="@drawable/outredpiece"
+        android:id="@+id/rPiece4"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="1117px"
+        android:layout_marginTop="720px"
+        android:src="@drawable/redpiece"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible" />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
-        android:id="@+id/outpiecered3"
-        android:layout_width="137px"
-        android:layout_height="26px"
-        android:layout_marginStart="733dp"
-        android:layout_marginTop="100px"
-        android:src="@drawable/outredpiece"
+        android:id="@+id/rPiece5"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="1117px"
+        android:layout_marginTop="640px"
+        android:src="@drawable/redpiece"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible" />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
-        android:id="@+id/outpiecered4"
-        android:layout_width="137px"
-        android:layout_height="26px"
-        android:layout_marginStart="733dp"
-        android:layout_marginTop="126px"
-        android:src="@drawable/outredpiece"
+        android:id="@+id/rPiece9"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="247px"
+        android:layout_marginTop="37px"
+        android:src="@drawable/redpiece"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
-        android:id="@+id/outpiecered5"
-        android:layout_width="137px"
-        android:layout_height="26px"
-        android:layout_marginStart="733dp"
-        android:layout_marginTop="152px"
-        android:src="@drawable/outredpiece"
+        android:id="@+id/rPiece10"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="247px"
+        android:layout_marginTop="117px"
+        android:src="@drawable/redpiece"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
-        android:id="@+id/outpiecered6"
-        android:layout_width="137px"
-        android:layout_height="26px"
-        android:layout_marginStart="733dp"
-        android:layout_marginTop="178px"
-        android:src="@drawable/outredpiece"
+        android:id="@+id/rPiece11"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="247px"
+        android:layout_marginTop="197px"
+        android:src="@drawable/redpiece"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
-        android:id="@+id/outpiecered7"
-        android:layout_width="137px"
-        android:layout_height="26px"
-        android:layout_marginStart="733dp"
-        android:layout_marginTop="204px"
-        android:src="@drawable/outredpiece"
+        android:id="@+id/rPiece13"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="247px"
+        android:layout_marginTop="357px"
+        android:src="@drawable/redpiece"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible" />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
-        android:id="@+id/outpiecered8"
-        android:layout_width="137px"
-        android:layout_height="26px"
-        android:layout_marginStart="733dp"
-        android:layout_marginTop="230px"
-        android:src="@drawable/outredpiece"
+        android:id="@+id/rPiece12"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="247px"
+        android:layout_marginTop="277px"
+        android:src="@drawable/redpiece"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible" />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
-        android:id="@+id/outpiecered9"
-        android:layout_width="137px"
-        android:layout_height="26px"
-        android:layout_marginStart="733dp"
-        android:layout_marginTop="256px"
-        android:src="@drawable/outredpiece"
+        android:id="@+id/bPiece4"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="247px"
+        android:layout_marginTop="880px"
+        android:src="@drawable/bluepiece"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible" />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
-        android:id="@+id/outpiecered10"
-        android:layout_width="137px"
-        android:layout_height="26px"
-        android:layout_marginStart="733dp"
-        android:layout_marginTop="282px"
-        android:src="@drawable/outredpiece"
+        android:id="@+id/bPiece5"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="247px"
+        android:layout_marginTop="800px"
+        android:src="@drawable/bluepiece"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
-        android:id="@+id/outpiecered11"
-        android:layout_width="137px"
-        android:layout_height="26px"
-        android:layout_marginStart="733dp"
-        android:layout_marginTop="308px"
-        android:src="@drawable/outredpiece"
+        android:id="@+id/bPiece7"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="247px"
+        android:layout_marginTop="640px"
+        android:src="@drawable/bluepiece"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
-        android:id="@+id/outpiecered12"
-        android:layout_width="137px"
-        android:layout_height="26px"
-        android:layout_marginStart="733dp"
-        android:layout_marginTop="334px"
-        android:src="@drawable/outredpiece"
+        android:id="@+id/bPiece3"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="94dp"
+        android:layout_marginTop="960px"
+        android:layout_marginEnd="11dp"
+        android:src="@drawable/bluepiece"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible" />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
-        android:id="@+id/outpiecered13"
-        android:layout_width="137px"
-        android:layout_height="26px"
-        android:layout_marginStart="733dp"
-        android:layout_marginTop="360px"
-        android:src="@drawable/outredpiece"
+        android:id="@+id/bPiece6"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="247px"
+        android:layout_marginTop="720px"
+        android:src="@drawable/bluepiece"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <ImageView
-        android:id="@+id/outpiecered14"
-        android:layout_width="137px"
-        android:layout_height="26px"
-        android:layout_marginStart="733dp"
-        android:layout_marginTop="386px"
-        android:src="@drawable/outredpiece"
+        android:id="@+id/rPiece6"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="767px"
+        android:layout_marginTop="960px"
+        android:src="@drawable/redpiece"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible" />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
-        android:id="@+id/outpiecered15"
-        android:layout_width="137px"
-        android:layout_height="26px"
-        android:layout_marginStart="733dp"
-        android:layout_marginTop="412px"
-        android:src="@drawable/outredpiece"
+        android:id="@+id/rPiece7"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="767px"
+        android:layout_marginTop="880px"
+        android:src="@drawable/redpiece"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece8"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="767px"
+        android:layout_marginTop="800px"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece14"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="1767px"
+        android:layout_marginTop="37px"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rPiece15"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="1767px"
+        android:layout_marginTop="117px"
+        android:src="@drawable/redpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece11"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="1117px"
+        android:layout_marginTop="37px"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece12"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="1117px"
+        android:layout_marginTop="117px"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece13"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="1117px"
+        android:layout_marginTop="197px"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece14"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="1117px"
+        android:layout_marginTop="277px"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece15"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="1117px"
+        android:layout_marginTop="357px"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece8"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="767px"
+        android:layout_marginTop="37px"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece9"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="767px"
+        android:layout_marginTop="117px"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece10"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="767px"
+        android:layout_marginTop="197px"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece1"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="1767px"
+        android:layout_marginTop="960px"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bPiece2"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginStart="1767px"
+        android:layout_marginTop="880px"
+        android:src="@drawable/bluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/outpieceblue1"
         android:layout_width="137px"
         android:layout_height="26px"
         android:layout_marginStart="733dp"
-        android:layout_marginTop="1007px"
+        android:layout_marginTop="48px"
         android:src="@drawable/outbluepiece"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -610,27 +485,27 @@
         android:layout_width="137px"
         android:layout_height="26px"
         android:layout_marginStart="733dp"
-        android:layout_marginTop="981px"
+        android:layout_marginTop="74px"
         android:src="@drawable/outbluepiece"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
     <ImageView
         android:id="@+id/outpieceblue3"
         android:layout_width="137px"
         android:layout_height="26px"
         android:layout_marginStart="733dp"
-        android:layout_marginTop="955px"
+        android:layout_marginTop="100px"
         android:src="@drawable/outbluepiece"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
     <ImageView
         android:id="@+id/outpieceblue4"
         android:layout_width="137px"
         android:layout_height="26px"
         android:layout_marginStart="733dp"
-        android:layout_marginTop="929px"
+        android:layout_marginTop="126px"
         android:src="@drawable/outbluepiece"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -640,27 +515,27 @@
         android:layout_width="137px"
         android:layout_height="26px"
         android:layout_marginStart="733dp"
-        android:layout_marginTop="903px"
+        android:layout_marginTop="152px"
         android:src="@drawable/outbluepiece"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
     <ImageView
         android:id="@+id/outpieceblue6"
         android:layout_width="137px"
         android:layout_height="26px"
         android:layout_marginStart="733dp"
-        android:layout_marginTop="877px"
+        android:layout_marginTop="178px"
         android:src="@drawable/outbluepiece"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
     <ImageView
         android:id="@+id/outpieceblue7"
         android:layout_width="137px"
         android:layout_height="26px"
         android:layout_marginStart="733dp"
-        android:layout_marginTop="851px"
+        android:layout_marginTop="204px"
         android:src="@drawable/outbluepiece"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -670,7 +545,7 @@
         android:layout_width="137px"
         android:layout_height="26px"
         android:layout_marginStart="733dp"
-        android:layout_marginTop="825px"
+        android:layout_marginTop="230px"
         android:src="@drawable/outbluepiece"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -680,7 +555,7 @@
         android:layout_width="137px"
         android:layout_height="26px"
         android:layout_marginStart="733dp"
-        android:layout_marginTop="799px"
+        android:layout_marginTop="256px"
         android:src="@drawable/outbluepiece"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -690,17 +565,17 @@
         android:layout_width="137px"
         android:layout_height="26px"
         android:layout_marginStart="733dp"
-        android:layout_marginTop="773px"
+        android:layout_marginTop="282px"
         android:src="@drawable/outbluepiece"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
     <ImageView
         android:id="@+id/outpieceblue11"
         android:layout_width="137px"
         android:layout_height="26px"
         android:layout_marginStart="733dp"
-        android:layout_marginTop="747px"
+        android:layout_marginTop="308px"
         android:src="@drawable/outbluepiece"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -710,27 +585,27 @@
         android:layout_width="137px"
         android:layout_height="26px"
         android:layout_marginStart="733dp"
-        android:layout_marginTop="721px"
-        android:src="@drawable/outbluepiece"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
-    <ImageView
-        android:id="@+id/outpieceblue13"
-        android:layout_width="137px"
-        android:layout_height="26px"
-        android:layout_marginStart="733dp"
-        android:layout_marginTop="695px"
+        android:layout_marginTop="334px"
         android:src="@drawable/outbluepiece"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="invisible" />
     <ImageView
+        android:id="@+id/outpieceblue13"
+        android:layout_width="137px"
+        android:layout_height="26px"
+        android:layout_marginStart="733dp"
+        android:layout_marginTop="360px"
+        android:src="@drawable/outbluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+    <ImageView
         android:id="@+id/outpieceblue14"
         android:layout_width="137px"
         android:layout_height="26px"
         android:layout_marginStart="733dp"
-        android:layout_marginTop="669px"
+        android:layout_marginTop="386px"
         android:src="@drawable/outbluepiece"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -740,8 +615,159 @@
         android:layout_width="137px"
         android:layout_height="26px"
         android:layout_marginStart="733dp"
-        android:layout_marginTop="643px"
+        android:layout_marginTop="412px"
         android:src="@drawable/outbluepiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:id="@+id/outpiecered1"
+        android:layout_width="137px"
+        android:layout_height="26px"
+        android:layout_marginStart="733dp"
+        android:layout_marginTop="1007px"
+        android:src="@drawable/outredpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+    <ImageView
+        android:id="@+id/outpiecered2"
+        android:layout_width="137px"
+        android:layout_height="26px"
+        android:layout_marginStart="733dp"
+        android:layout_marginTop="981px"
+        android:src="@drawable/outredpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+    <ImageView
+        android:id="@+id/outpiecered3"
+        android:layout_width="137px"
+        android:layout_height="26px"
+        android:layout_marginStart="733dp"
+        android:layout_marginTop="955px"
+        android:src="@drawable/outredpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+    <ImageView
+        android:id="@+id/outpiecered4"
+        android:layout_width="137px"
+        android:layout_height="26px"
+        android:layout_marginStart="733dp"
+        android:layout_marginTop="929px"
+        android:src="@drawable/outredpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+    <ImageView
+        android:id="@+id/outpiecered5"
+        android:layout_width="137px"
+        android:layout_height="26px"
+        android:layout_marginStart="733dp"
+        android:layout_marginTop="903px"
+        android:src="@drawable/outredpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible" />
+    <ImageView
+        android:id="@+id/outpiecered6"
+        android:layout_width="137px"
+        android:layout_height="26px"
+        android:layout_marginStart="733dp"
+        android:layout_marginTop="877px"
+        android:src="@drawable/outredpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible" />
+    <ImageView
+        android:id="@+id/outpiecered7"
+        android:layout_width="137px"
+        android:layout_height="26px"
+        android:layout_marginStart="733dp"
+        android:layout_marginTop="851px"
+        android:src="@drawable/outredpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible" />
+    <ImageView
+        android:id="@+id/outpiecered8"
+        android:layout_width="137px"
+        android:layout_height="26px"
+        android:layout_marginStart="733dp"
+        android:layout_marginTop="825px"
+        android:src="@drawable/outredpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible" />
+    <ImageView
+        android:id="@+id/outpiecered9"
+        android:layout_width="137px"
+        android:layout_height="26px"
+        android:layout_marginStart="733dp"
+        android:layout_marginTop="799px"
+        android:src="@drawable/outredpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible" />
+    <ImageView
+        android:id="@+id/outpiecered10"
+        android:layout_width="137px"
+        android:layout_height="26px"
+        android:layout_marginStart="733dp"
+        android:layout_marginTop="773px"
+        android:src="@drawable/outredpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible" />
+    <ImageView
+        android:id="@+id/outpiecered11"
+        android:layout_width="137px"
+        android:layout_height="26px"
+        android:layout_marginStart="733dp"
+        android:layout_marginTop="747px"
+        android:src="@drawable/outredpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+    <ImageView
+        android:id="@+id/outpiecered12"
+        android:layout_width="137px"
+        android:layout_height="26px"
+        android:layout_marginStart="733dp"
+        android:layout_marginTop="721px"
+        android:src="@drawable/outredpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+    <ImageView
+        android:id="@+id/outpiecered13"
+        android:layout_width="137px"
+        android:layout_height="26px"
+        android:layout_marginStart="733dp"
+        android:layout_marginTop="695px"
+        android:src="@drawable/outredpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible" />
+    <ImageView
+        android:id="@+id/outpiecered14"
+        android:layout_width="137px"
+        android:layout_height="26px"
+        android:layout_marginStart="733dp"
+        android:layout_marginTop="669px"
+        android:src="@drawable/outredpiece"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible" />
+    <ImageView
+        android:id="@+id/outpiecered15"
+        android:layout_width="137px"
+        android:layout_height="26px"
+        android:layout_marginStart="733dp"
+        android:layout_marginTop="643px"
+        android:src="@drawable/outredpiece"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="invisible"/>
@@ -749,9 +775,10 @@
     <TextView
         android:id="@+id/winsign"
         android:layout_width="282dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="268dp"
-        android:layout_marginTop="164dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="258dp"
+        android:layout_marginTop="150dp"
+        android:gravity="center"
         android:text="X WON"
         android:textSize="150px"
         android:visibility="invisible"
@@ -763,7 +790,7 @@
         android:layout_width="240px"
         android:layout_height="120px"
         android:layout_marginTop="232dp"
-        android:layout_marginEnd="300dp"
+        android:layout_marginStart="404dp"
         android:background="@drawable/blackbackground"
         android:onClick="saveResult"
         android:text="SAVE"
@@ -777,7 +804,7 @@
         android:layout_width="240px"
         android:layout_height="120px"
         android:layout_marginTop="232dp"
-        android:layout_marginEnd="408dp"
+        android:layout_marginStart="300dp"
         android:background="@drawable/blackbackground"
         android:onClick="exitActivity"
         android:text="EXIT"
@@ -787,4 +814,4 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

@@ -35,6 +35,12 @@ public class ShowResultsActivity extends AppCompatActivity {
     private BroadcastReceiver mReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /*
+        this function will run when the activity is created and will show results, create broadcast receiver
+        and will set the layout.
+        param: saveInstanceState : Bundle
+        return: void
+        */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_results);
         this.mReceiver = new ShowResultsActivity.BatteryBroadcastReceiver();
@@ -66,6 +72,11 @@ public class ShowResultsActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            /*
+            this function will run when the phone sends a broadcast and will show user an alert
+            param: context : Context , intent : Intent
+            return: void
+            */
             IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
             Intent batteryStatus = context.registerReceiver(null, ifilter);
             int level = intent.getIntExtra(BATTERY_LEVEL, 0);
@@ -84,15 +95,30 @@ public class ShowResultsActivity extends AppCompatActivity {
     }
     @Override
     protected void onStart() {
+        /*
+        this function will run when the activity starts to be shown, will start the broadcast receiver.
+        param: none
+        return: void
+        */
         registerReceiver(this.mReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         super.onStart();
     }
     @Override
     protected void onStop() {
+        /*
+        this function will run when the activity stops to be shown, will stop the broadcast receiver.
+        param: none
+        return: void
+        */
         unregisterReceiver(this.mReceiver);
         super.onStop();
     }
     public void readFile() {
+        /*
+        this function will read a file contents.
+        param: none
+        return: void
+        */
         StringBuilder text = new StringBuilder();
         try{
             File root = new File(Environment.getExternalStorageDirectory(), "Files");
@@ -117,12 +143,22 @@ public class ShowResultsActivity extends AppCompatActivity {
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        /*
+        this function will start the menu on the activity
+        param: menu : Menu
+        return: boolean
+        */
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.mymenu2,menu);
         return true;
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        /*
+        this function will handle menu options selected
+        param: item : MenuItem
+        return: boolean
+        */
         switch (item.getItemId()){
             case R.id.item1:
                 exitActivity();
@@ -130,5 +166,12 @@ public class ShowResultsActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    public void exitActivity() { finish(); }
+    public void exitActivity() {
+        /*
+        this function will finish the activity
+        param: none
+        return: void
+        */
+        finish();
+    }
 }
