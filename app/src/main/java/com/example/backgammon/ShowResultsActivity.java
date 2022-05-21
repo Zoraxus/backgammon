@@ -29,9 +29,15 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 public class ShowResultsActivity extends AppCompatActivity {
+
+    // used for extracting the information from the results file
     final private String FileName = "gameResults.txt";
     private LinkedList<String> results = new LinkedList<>();
+
+    // used to show in information
     private int[] TextIDs = new int[]{R.id.result1,R.id.result2,R.id.result3,R.id.result4,R.id.result5};
+
+
     private BroadcastReceiver mReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +51,7 @@ public class ShowResultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_results);
         this.mReceiver = new ShowResultsActivity.BatteryBroadcastReceiver();
         readFile();
-        if(this.results.size() >= 5) {
+        if(this.results.size() >= 5) { // if there are more than 5 results then show only the last five
             for (int j=0, i = this.results.size() - 1; i > this.results.size() - 6; i--) {
                 String text = "";
                 TextView txtview = findViewById(TextIDs[j]);
@@ -55,7 +61,7 @@ public class ShowResultsActivity extends AppCompatActivity {
                 j++;
             }
         }
-        else{
+        else{ // if there are less than 5 results then show only the first ones that exist
             for (int j = 0, i = this.results.size() - 1; i > -1; i--) {
                 String text = "";
                 TextView txtview = findViewById(TextIDs[j]);
@@ -119,27 +125,23 @@ public class ShowResultsActivity extends AppCompatActivity {
         param: none
         return: void
         */
-        StringBuilder text = new StringBuilder();
         try{
             File root = new File(Environment.getExternalStorageDirectory(), "Files");
             if (!root.exists()) {
                 root.mkdir();
             }
             File file = new File(root,this.FileName);
-            BufferedReader br = new BufferedReader(new FileReader(file));
+            BufferedReader br = new BufferedReader(new FileReader(file)); // create reader
             String line;
-            while((line = br.readLine()) != null)
+            while((line = br.readLine()) != null) // read line by line
             {
+                // add each line into the results string list.
                 this.results.add(line);
-                text.append(line);
-                text.append("\n");
             }
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("here: ");
-        System.out.println(text.toString());
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

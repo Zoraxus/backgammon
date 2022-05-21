@@ -17,9 +17,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 public class ShowRulesActivity extends AppCompatActivity {
+
+    // used for pages
     private int[] Pages = new int[]{R.drawable.rulespage1,R.drawable.rulespage2,R.drawable.rulespage3,
             R.drawable.rulespage4,R.drawable.rulespage5};
     private int currentPage = 1;
+
+
     private BroadcastReceiver mReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,7 @@ public class ShowRulesActivity extends AppCompatActivity {
             int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
             boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
                     status == BatteryManager.BATTERY_STATUS_FULL;
-            if(!isCharging && level <= 15 && !this.isLow) {
+            if(!isCharging && level <= 15 && !this.isLow) { // if the phone isn't being charged and level is less than 15
                 this.isLow = true;
                 Toast toast = Toast.makeText(context, "Low Battery Alert!", Toast.LENGTH_LONG);
                 toast.show();

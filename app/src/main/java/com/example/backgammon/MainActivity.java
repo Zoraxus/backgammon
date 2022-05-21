@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
             boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
                     status == BatteryManager.BATTERY_STATUS_FULL;
-            if(!isCharging && level <= 15 && !this.isLow) {
+            if(!isCharging && level <= 15 && !this.isLow) { // checks if phone is charging and battery level is less than 15
                 this.isLow = true;
                 Toast toast = Toast.makeText(context, "Low Battery Alert!", Toast.LENGTH_LONG);
                 toast.show();
@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // check for writing permission and if there isn't ask for it
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             Log.d("WRITE PERMISSION","success");
         } else {
@@ -86,11 +87,12 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
-        this.mReceiver = new BatteryBroadcastReceiver();
 
+        this.mReceiver = new BatteryBroadcastReceiver();
+        // create light sensor
         this.sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         this.sensorLight = this.sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-
+        // listen for sensor events
         SensorEventListener sensorEventListenerLight = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent sensorEvent) {
@@ -100,14 +102,14 @@ public class MainActivity extends AppCompatActivity {
                 return:void
                 */
                 float lux = sensorEvent.values[0];
-                if(lux < 2 && !isDark)
+                if(lux < 1 && !isDark) // if lux is less than 1 its very dark outside
                 {
                     Context context = getApplicationContext();
                     Toast toast = Toast.makeText(context, "It's Dark, Lower your phone brightness", Toast.LENGTH_SHORT);
                     toast.show();
                     isDark = true;
                 }
-                else
+                else if (lux > 200)
                 {
                     isDark = false;
                 }
@@ -116,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAccuracyChanged(Sensor sensor, int i) {} // i don't use this one.
         };
+        // set the delay for the sensor
         this.sensorManager.registerListener(sensorEventListenerLight,this.sensorLight,sensorManager.SENSOR_DELAY_NORMAL);
 
     }

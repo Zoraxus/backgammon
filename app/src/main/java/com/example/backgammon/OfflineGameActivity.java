@@ -67,7 +67,7 @@ public class OfflineGameActivity extends Activity {
     private int press = 0;
     private int col_pressed = -1;
 
-    // used to check which column to diHighlight
+    // used to check which column to unHighlight
     private boolean dHighlight1 = true;
     private boolean dHighlight2 = true;
     private boolean dHighlight3 = true;
@@ -130,16 +130,22 @@ public class OfflineGameActivity extends Activity {
         param: savedInstanceState : Bundle
         return:void
          */
+
+        // set the activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offline_game);
+        // set up the board
         LinkedList<Integer> ll = getIds();
         this.game = new Game(this.columnsPos, ll);
+        // set up the diceMap
         this.diceMap.put(1, R.drawable.dice1);
         this.diceMap.put(2, R.drawable.dice2);
         this.diceMap.put(3, R.drawable.dice3);
         this.diceMap.put(4, R.drawable.dice4);
         this.diceMap.put(5, R.drawable.dice5);
         this.diceMap.put(6, R.drawable.dice6);
+
+        // set up broadcast receiver, light sensor and the player names dialog
         this.mReceiver = new OfflineGameActivity.BatteryBroadcastReceiver();
         showStartDialog();
         this.sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -149,20 +155,20 @@ public class OfflineGameActivity extends Activity {
             @Override
             public void onSensorChanged(SensorEvent sensorEvent) {
                 float lux = sensorEvent.values[0];
-                if (lux < 2 && !isDark) {
+                if (lux < 1 && !isDark) { // if lux is less than 1 then its too dark
                     Context context = getApplicationContext();
                     Toast toast = Toast.makeText(context, "It's Dark, Lower your phone brightness", Toast.LENGTH_SHORT);
                     toast.show();
                     isDark = true;
-                } else {
+                }
+                else if (lux > 200)
+                {
                     isDark = false;
                 }
             }
 
             @Override
-            public void onAccuracyChanged(Sensor sensor, int i) {
-
-            }
+            public void onAccuracyChanged(Sensor sensor, int i) { } // i don't use this
         };
         this.sensorManager.registerListener(sensorEventListenerLight, this.sensorLight, sensorManager.SENSOR_DELAY_NORMAL);
     }
@@ -173,28 +179,30 @@ public class OfflineGameActivity extends Activity {
         return:void
          */
         final Dialog dialog = new Dialog(OfflineGameActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.get_names_dialog);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // setting the window
+        dialog.setCancelable(false); // setting to not being able to cancel by pressing outside of the window
+        dialog.setContentView(R.layout.get_names_dialog); // set the content
+        // get the 2 names
         final EditText name1Et = dialog.findViewById(R.id.name1);
         final EditText name2Et = dialog.findViewById(R.id.name2);
-
+        // get the 2 buttons
         Button startButton = dialog.findViewById(R.id.start_button);
         Button cancelButton = dialog.findViewById(R.id.cancel_button);
-
+        // listen to start button pressed
         startButton.setOnClickListener(new View.OnClickListener() {
            @Override
             public void onClick(View view)
            {
-               name_player_1 = name1Et.getText().toString();
-               name_player_2 = name2Et.getText().toString();
-               if(name_player_1.length() > 6)
+               name_player_1 = name1Et.getText().toString();// first name
+               name_player_2 = name2Et.getText().toString();// second name
+               if(name_player_1.length() > 6) // make sure the name isn't too long
                {
                    Context context = getApplicationContext();
                    Toast toast = Toast.makeText(context, "Max Name Length 6.", Toast.LENGTH_SHORT);
                    toast.show();
                }
                else {
+                   // set the names of the players and close the dialog
                    TextView tv = findViewById(R.id.blueName);
                    tv.setText(name_player_1);
                    tv.setVisibility(View.VISIBLE);
@@ -205,10 +213,12 @@ public class OfflineGameActivity extends Activity {
                }
            }
         });
+        // listen to cancel button pressed
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
+                // close the dialog window and finish the activity
                 dialog.dismiss();
                 finish();
             }
@@ -233,7 +243,7 @@ public class OfflineGameActivity extends Activity {
             int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
             boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
                     status == BatteryManager.BATTERY_STATUS_FULL;
-            if(!isCharging && level <= 15 && !this.isLow) {
+            if(!isCharging && level <= 15 && !this.isLow) { // if phone isn't charging and teh battery level is less than 15
                 this.isLow = true;
                 Toast toast = Toast.makeText(context, "Low Battery Alert!", Toast.LENGTH_LONG);
                 toast.show();
@@ -310,7 +320,7 @@ public class OfflineGameActivity extends Activity {
          */
         int columnNum = -1;
         for (int i=0;i<this.columnsPos.length;i++){
-            if (i < this.columnsPos.length/2){
+            if (i < this.columnsPos.length/2){ // check for columns at the bottom
                 if (x <= this.columnsPos[i][0][0] && x >= this.columnsPos[i][1][0]){
                     if (y <= this.columnsPos[i][0][1] && y >= this.columnsPos[i][1][1]){
                         columnNum = i+1;
@@ -318,7 +328,7 @@ public class OfflineGameActivity extends Activity {
                     }
                 }
             }
-            else{
+            else{ // check for the columns at the top
                 if (x >= this.columnsPos[i][0][0] && x <= this.columnsPos[i][1][0]){
                     if (y >= this.columnsPos[i][0][1] && y <= this.columnsPos[i][1][1]){
                         columnNum = i+1;
@@ -331,29 +341,29 @@ public class OfflineGameActivity extends Activity {
     }
     public void highlightColumn(int colNum, boolean flag){
         /*
-        this function will highlight a column given
+        this function will highlight/unhighlight the pieces in a column given (flag is true = highlight / flag is false = unhighlight)
         param: colNum : int, flag : boolean
         return: void
          */
         Column column = this.game.getAcolumn(colNum);
         LinkedList<Piece> ll = column.getList();
-        if (ll.size() >= 1){
-            int type = ll.get(0).getType();
-            for (int i=0;i<ll.size();i++) {
-                ImageView imgview = findViewById(ll.get(i).getId());
-                if (type == 1){
-                    if (flag){
+        if (ll.size() >= 1){ // make sure the column isn't empty
+            int type = ll.get(0).getType(); // find the type of the column
+            for (int i=0;i<ll.size();i++) { // goes through all the pieces in the column
+                ImageView imgview = findViewById(ll.get(i).getId()); // get the image view for each piece
+                if (type == 1){ // if the column is blue
+                    if (flag){// highlight
                         imgview.setImageResource(R.drawable.bluepieceglow);
                     }
-                    else{
+                    else{// unhighlight
                         imgview.setImageResource(R.drawable.bluepiece);
                     }
                 }
-                else{
-                    if (flag){
+                else{ // else the column is red
+                    if (flag){// highlight
                         imgview.setImageResource(R.drawable.redpieceglow);
                     }
-                    else {
+                    else {// unhighlight
                         imgview.setImageResource(R.drawable.redpiece);
                     }
                 }
@@ -374,39 +384,47 @@ public class OfflineGameActivity extends Activity {
         param: colNum1 : int , colNum2 : int
         return: void
          */
-        Piece p = this.game.move(colNum1,colNum2);
-        int place = this.game.getAcolumn(colNum2).getList().size();
-        if (place == 2) {
-            int type1 = this.game.getAcolumn(colNum2).getList().get(1).getType();
-            int type2 = this.game.getAcolumn(colNum2).getList().get(0).getType();
-            if (type1 != type2) {
-                if (type2 == 1) {
+        Piece p = this.game.move(colNum1,colNum2); // move and get the piece moved
+        int place = this.game.getAcolumn(colNum2).getList().size(); // get how many pieces are in the dest column
+        if (place == 2) { // if the dest column had only one piece
+            int type1 = this.game.getAcolumn(colNum2).getList().get(1).getType(); // get the type moved
+            int type2 = this.game.getAcolumn(colNum2).getList().get(0).getType(); // ge the type moved to
+            if (type1 != type2) { // if a eat move happened
+                if (type2 == 1) {// if the piece eaten is blue
+
+                    // put the piece eaten in the eaten list
                     Piece EatenPiece = this.game.getAcolumn(colNum2).getList().getFirst();
                     this.game.getAcolumn(colNum2).getList().removeFirst();
                     ImageView img = findViewById(EatenPiece.getId());
                     this.game.getBLueEaten().add(EatenPiece);
+
+                    // if there is place to show in the middle
                     if (this.game.getBLueEaten().size() <= 6){
                         img.setX(this.blueEaten[this.game.getBLueEaten().size() - 1][0]);
                         img.setY(this.blueEaten[this.game.getBLueEaten().size() - 1][1]);
                         img.setVisibility(View.VISIBLE);
                     }
-                    else
+                    else // if there isn't place to show in the middle
                     {
                         img.setVisibility(View.INVISIBLE);
                     }
                     this.is_blue_eaten = true;
 
-                } else {
+                } else {// if the piece eaten is red
+
+                    // put the piece eaten in the eaten list
                     Piece EatenPiece = this.game.getAcolumn(colNum2).getList().getFirst();
                     this.game.getAcolumn(colNum2).getList().removeFirst();
                     ImageView img = findViewById(EatenPiece.getId());
                     this.game.getRedEaten().add(EatenPiece);
+
+                    // if there is place to show in the middle
                     if (this.game.getRedEaten().size() <= 6) {
                         img.setX(this.redEaten[this.game.getRedEaten().size() - 1][0]);
                         img.setY(this.redEaten[this.game.getRedEaten().size() - 1][1]);
                         img.setVisibility(View.VISIBLE);
                     }
-                    else
+                    else// if there isn't place to show in the middle
                     {
                         img.setVisibility(View.INVISIBLE);
                     }
@@ -415,13 +433,14 @@ public class OfflineGameActivity extends Activity {
                 place = place - 1;
             }
         }
+        // if a piece isn't eaten
         ImageView imgview = findViewById(p.getId());
-        if (place <= 10) {
-            if (colNum2 <= 12) {
+        if (place <= 10) { // if there is place to show the piece in the column
+            if (colNum2 <= 12) { // if the column is in the bottom
                 imgview.setY(this.piecesPosBottom[place - 1]);
                 imgview.setX(this.columnsPos[colNum2 - 1][1][0] + 27);
                 imgview.setVisibility(View.VISIBLE);
-            } else {
+            } else { // if the column is in the top
                 imgview.setY(this.piecesPosTop[place - 1]);
                 imgview.setX(this.columnsPos[Math.abs(colNum2 - 24)][1][0] + 27);
                 imgview.setVisibility(View.VISIBLE);
@@ -443,9 +462,10 @@ public class OfflineGameActivity extends Activity {
         param: col1 : int , col2 : int
         return: boolean
          */
-        if (col1 == -1){
+        if (col1 == -1){ // if blue wants to get out of being eaten
+            // if the place he want to get out to is a valid place
             if (this.game.getAcolumn(col2).getList().size() <= 1 || this.turn == this.game.getAcolumn(col2).getList().getFirst().getType()){
-                if (col2 == this.MovePower1){
+                if (col2 == this.MovePower1){ // is the move dice 1 ?
                     if (this.NumOfMoves <= 2){
                         this.MovePower1 = 0;
                         ImageView img5 = findViewById(R.id.dice5);
@@ -455,7 +475,7 @@ public class OfflineGameActivity extends Activity {
                     }
                     return true;
                 }
-                else if(col2 == this.MovePower2){
+                else if(col2 == this.MovePower2){// is the move dice 2 ?
                     if (this.NumOfMoves <= 2){
                         this.MovePower2 = 0;
                         ImageView img6 = findViewById(R.id.dice6);
@@ -474,9 +494,10 @@ public class OfflineGameActivity extends Activity {
                 return false;
             }
         }
-        else if(col1 == -2){
+        else if(col1 == -2){// if blue wants to get out of being eaten
+            // if the place he want to get out to is a valid place
             if (this.game.getAcolumn(col2).getList().size() <= 1 || this.turn == this.game.getAcolumn(col2).getList().getFirst().getType()){
-                if (col2 == 25-this.MovePower1){
+                if (col2 == 25-this.MovePower1){ // is the move dice 1 ?
                     if (this.NumOfMoves <= 2){
                         this.MovePower1 = 0;
                         ImageView img5 = findViewById(R.id.dice5);
@@ -486,7 +507,7 @@ public class OfflineGameActivity extends Activity {
                     }
                     return true;
                 }
-                else if(col2 == 25-this.MovePower2){
+                else if(col2 == 25-this.MovePower2){// is the move dice 2 ?
                     if (this.NumOfMoves <= 2){
                         this.MovePower2 = 0;
                         ImageView img6 = findViewById(R.id.dice6);
@@ -505,6 +526,7 @@ public class OfflineGameActivity extends Activity {
                 return false;
             }
         }
+        // if there isn't a and eating situation and the move is to a column of another type
         int type = this.game.getAcolumn(col1).getList().get(0).getType();
         if (this.game.getAcolumn(col2).getList().size() > 0){
             if (this.game.getAcolumn(col2).getList().get(0).getType() != type && this.game.getAcolumn(col2).getList().size() > 1){
@@ -512,8 +534,9 @@ public class OfflineGameActivity extends Activity {
             }
         }
 
-        if (type == 1)
+        if (type == 1) // if blue want to move
         {
+            // if the dice used is dice 1
             if (col1 + this.MovePower1 == col2 && this.MovePower1 != 0)
             {
                 if (this.NumOfMoves <= 2) {
@@ -525,6 +548,7 @@ public class OfflineGameActivity extends Activity {
                 }
                 return true;
             }
+            // if the dice used is dice 2
             else if (col1 + this.MovePower2 == col2 && this.MovePower2 != 0)
             {
                 if (this.NumOfMoves <= 2) {
@@ -541,7 +565,8 @@ public class OfflineGameActivity extends Activity {
                 return false;
             }
         }
-        else{
+        else{// if red want to move
+            // if the dice used is dice 1
             if (col1 - this.MovePower1 == col2 && this.MovePower1 != 0)
             {
                 if (this.NumOfMoves <= 2) {
@@ -553,6 +578,7 @@ public class OfflineGameActivity extends Activity {
                 }
                 return true;
             }
+            // if the dice used is dice 2
             else if(col1 - this.MovePower2 == col2 && this.MovePower2 != 0)
             {
                 if (this.NumOfMoves <= 2) {
@@ -580,7 +606,7 @@ public class OfflineGameActivity extends Activity {
         {
             return true;
         }
-        int mult;
+        int mult; // mult differentiate between the moves of red and blue as they move in different directions
         if(type == 1){
             mult = 1;
         }
@@ -589,10 +615,13 @@ public class OfflineGameActivity extends Activity {
             mult = -1;
         }
         int count = 0;
+        // if blue is eaten and its his turn to get out
         if (this.is_blue_eaten && this.turn == 1)
         {
             if(this.MovePower1 != 0)
             {
+                // if there is a possible column with move1
+
                 if(this.game.getAcolumn(this.MovePower1).getList().size() <= 1)
                 {
                     return true;
@@ -607,6 +636,8 @@ public class OfflineGameActivity extends Activity {
             }
             if(this.MovePower2 != 0)
             {
+                // if there is a possible column with move2
+
                 if(this.game.getAcolumn(this.MovePower2).getList().size() <= 1)
                 {
                     return true;
@@ -621,10 +652,13 @@ public class OfflineGameActivity extends Activity {
                 }
             }
         }
+        // if blue is eaten and its his turn to get out
         else if (this.is_red_eaten && this.turn == 0)
         {
             if(this.MovePower1 != 0)
             {
+                // if there is a possible column with move1
+
                 if(this.game.getAcolumn(25-this.MovePower1).getList().size() <= 1)
                 {
                     return true;
@@ -639,6 +673,8 @@ public class OfflineGameActivity extends Activity {
             }
             if(this.MovePower2 != 0)
             {
+                // if there is a possible column with move2
+
                 if(this.game.getAcolumn(25-this.MovePower2).getList().size() <= 1)
                 {
                     return true;
@@ -653,11 +689,12 @@ public class OfflineGameActivity extends Activity {
                 }
             }
         }
-        if(count > 0)
+        if(count > 0) // if there is a piece eaten but no moves possible return false
         {
             return false;
         }
         int col1,col2;
+        // got through all the possible columns
         for (int i=0;i<24;i++){
             if(this.game.getAcolumn(i+1).getList().size() > 0)
             {
@@ -665,29 +702,25 @@ public class OfflineGameActivity extends Activity {
                 {
                     col1 = i + this.MovePower1*mult + 1;
                     col2 = i + this.MovePower2*mult + 1;
-                    if(col1 > 0 && col1 <= 24)
+                    if(col1 > 0 && col1 <= 24) // if the column is on the board
                     {
                         if(this.game.getAcolumn(col1).getList().size() <= 1)
                         {
-                            System.out.println("wtf:" + col1);
                             return true;
                         }
                         else if(this.game.getAcolumn(col1).getList().getFirst().getType() == type)
                         {
-                            System.out.println("wtf:" + col1);
                             return true;
                         }
                     }
-                    if(col2 > 0 && col2 <= 24)
+                    if(col2 > 0 && col2 <= 24) // if the column is on the board
                     {
                         if(this.game.getAcolumn(col2).getList().size() <= 1)
                         {
-                            System.out.println("wtf:" + col2);
                             return true;
                         }
                         else if(this.game.getAcolumn(col2).getList().getFirst().getType() == type)
                         {
-                            System.out.println("wtf:" + col2);
                             return true;
                         }
                     }
@@ -702,24 +735,25 @@ public class OfflineGameActivity extends Activity {
         param: view : View
         return: void
          */
-        if (this.rolled == false){
+        if (!this.rolled){
+            // roll dice
             int dice1 = Math.abs(srandom.nextInt()%6)+1;
             int dice2 = Math.abs(srandom.nextInt()%6)+1;
-            System.out.println("dice1: "+dice1);
-            System.out.println("dice2: "+dice2);
-            if (dice1 == dice2){
+
+            if (dice1 == dice2){ // if there is a a double
                 this.NumOfMoves = 4;
                 this.MovePower1 = dice1;
                 this.MovePower2 = dice2;
             }
-            else
+            else // if there isn't a double
             {
                 this.NumOfMoves = 2;
                 this.MovePower1 = dice1;
                 this.MovePower2 = dice2;
             }
-            if(!AreThereAnyPossibleMoves(this.turn)){
+            if(!AreThereAnyPossibleMoves(this.turn)){ // check if there aren't any possible moves
                 this.turn = Math.abs(this.turn-1);
+                // set the turn arrow
                 ImageView arrow = findViewById(R.id.turnArrow);
                 if(this.turn == 1){
                     arrow.setImageResource(R.drawable.bluearrow);
@@ -731,6 +765,7 @@ public class OfflineGameActivity extends Activity {
                 this.MovePower1 = 0;
                 this.MovePower2 = 0;
                 this.NumOfMoves = 0;
+                // set the dice
                 ImageView imgV5 = findViewById(R.id.dice5);
                 ImageView imgV7 = findViewById(R.id.dice7);
                 imgV5.setImageResource(this.diceMap.get(dice1));
@@ -746,6 +781,7 @@ public class OfflineGameActivity extends Activity {
             }
             else
             {
+                // set the dice
                 Button button1 = findViewById(R.id.roll1);
                 button1.setBackgroundResource(R.drawable.reddiceglow);
                 ImageView imgV5 = findViewById(R.id.dice5);
@@ -760,6 +796,7 @@ public class OfflineGameActivity extends Activity {
                 imgV6.setVisibility(View.VISIBLE);
                 imgV8.setImageResource(this.diceMap.get(dice2));
                 imgV8.setVisibility(View.VISIBLE);
+                // highlight the possible columns depends on the turn
                 if(this.turn == 1 && this.is_blue_eaten)
                 {
                     highlightPossibleColumns(-1);
@@ -778,18 +815,21 @@ public class OfflineGameActivity extends Activity {
         param: midType : int , col : int
         return: void
          */
-        if(midType == -1){
+        if(midType == -1){ // if blue is moving out of eat
+            // if the column is empty or in the same type
             if (this.game.getAcolumn(col).getList().size() == 0 || this.game.getAcolumn(col).getList().getFirst().getType() == 1){
+                // move the piece out of eat
                 Piece p = this.game.getBLueEaten().getLast();
                 this.game.getBLueEaten().removeLast();
                 this.game.getAcolumn(col).getList().add(p);
                 ImageView imageview = findViewById(p.getId());
-                if (this.game.getAcolumn(col).getList().size() <= 10) {
+
+                if (this.game.getAcolumn(col).getList().size() <= 10) { // if there is place left to show in the column
                     imageview.setY(this.piecesPosBottom[this.game.getAcolumn(col).getList().size() - 1]);
                     imageview.setX(this.columnsPos[Math.abs(col - 1)][1][0] + 27);
                     imageview.setVisibility(View.VISIBLE);
                 }
-                else
+                else// if there isn't place left to show in the column
                 {
                     imageview.setVisibility(View.INVISIBLE);
                 }
@@ -798,25 +838,30 @@ public class OfflineGameActivity extends Activity {
                 }
 
             }
+            // if the column isn't empty or in the same type
             else{
                 Piece p = this.game.getBLueEaten().getLast();
+                // eat the piece eaten
                 this.game.getBLueEaten().removeLast();
                 Piece p2 = this.game.getAcolumn(col).getList().getFirst();
                 this.game.getAcolumn(col).getList().removeFirst();
                 this.game.getRedEaten().add(p2);
                 ImageView img1 = findViewById(p2.getId());
+                // if there is a place in the middle to show the piece
                 if (this.game.getRedEaten().size() <= 6) {
                     img1.setX(this.redEaten[this.game.getRedEaten().size() - 1][0]);
                     img1.setY(this.redEaten[this.game.getRedEaten().size() - 1][1]);
                     img1.setVisibility(View.VISIBLE);
                 }
-                else
+                else // if there isn't a place in the middle to show the piece
                 {
                     img1.setVisibility(View.INVISIBLE);
                 }
+                // move the piece from the middle to a column
                 this.is_red_eaten = true;
                 this.game.getAcolumn(col).getList().add(p);
                 ImageView imageview = findViewById(p.getId());
+                // if there is a place left to show the piece in the column
                 if (this.game.getAcolumn(col).getList().size() <= 10) {
                     imageview.setY(this.piecesPosBottom[this.game.getAcolumn(col).getList().size() - 1]);
                     imageview.setX(this.columnsPos[Math.abs(col - 1)][1][0] + 27);
@@ -831,18 +876,20 @@ public class OfflineGameActivity extends Activity {
                 }
             }
         }
-        else {
+        else {// if red is moving out of eat
+            // if the column is empty or in the same type
             if (this.game.getAcolumn(col).getList().size() == 0 || this.game.getAcolumn(col).getList().getFirst().getType() == 0){
                 Piece p = this.game.getRedEaten().getLast();
+                // move the piece out of eat
                 this.game.getRedEaten().removeLast();
                 this.game.getAcolumn(col).getList().add(p);
                 ImageView imageview = findViewById(p.getId());
-                if (this.game.getAcolumn(col).getList().size() <= 10) {
+                if (this.game.getAcolumn(col).getList().size() <= 10) {// if there is place left to show in the column
                     imageview.setY(this.piecesPosTop[this.game.getAcolumn(col).getList().size() - 1]);
                     imageview.setX(this.columnsPos[Math.abs(col - 24)][1][0] + 27);
                     imageview.setVisibility(View.VISIBLE);
                 }
-                else
+                else// if there isn't place left to show in the column
                 {
                     imageview.setVisibility(View.INVISIBLE);
                 }
@@ -851,13 +898,16 @@ public class OfflineGameActivity extends Activity {
                 }
 
             }
+            // if the column isn't empty or in the same type
             else{
+                // eat the piece eaten
                 Piece p = this.game.getRedEaten().getLast();
                 this.game.getRedEaten().removeLast();
                 Piece p2 = this.game.getAcolumn(col).getList().getFirst();
                 this.game.getAcolumn(col).getList().removeFirst();
                 this.game.getBLueEaten().add(p2);
                 ImageView img1 = findViewById(p2.getId());
+                // if there is a place in the middle to show the piece
                 if (this.game.getBLueEaten().size() <= 6) {
                     img1.setX(this.blueEaten[this.game.getBLueEaten().size() - 1][0]);
                     img1.setY(this.blueEaten[this.game.getBLueEaten().size() - 1][1]);
@@ -867,15 +917,16 @@ public class OfflineGameActivity extends Activity {
                 {
                     img1.setVisibility(View.INVISIBLE);
                 }
+                // move the piece out of eat
                 this.is_blue_eaten = true;
                 this.game.getAcolumn(col).getList().add(p);
                 ImageView imageview = findViewById(p.getId());
-                if (this.game.getAcolumn(col).getList().size() <= 10) {
+                if (this.game.getAcolumn(col).getList().size() <= 10) {// if there is place left to show in the column
                     imageview.setY(this.piecesPosTop[this.game.getAcolumn(col).getList().size() - 1]);
                     imageview.setX(this.columnsPos[Math.abs(col - 24)][1][0] + 27);
                     imageview.setVisibility(View.VISIBLE);
                 }
-                else
+                else// if there isn't place left to show in the column
                 {
                     imageview.setVisibility(View.INVISIBLE);
                 }
@@ -892,13 +943,14 @@ public class OfflineGameActivity extends Activity {
         return: void
          */
         int col1 = -1, col2 = -1;
-        if(this.turn == 1){
+        if(this.turn == 1){ // if its blue's turn
             if(checkForEndGame(this.turn)) {
-                if(col == 25-this.MovePower1 || col == 25-this.MovePower2)
+                if(col == 25-this.MovePower1 || col == 25-this.MovePower2) // if blue can remove a piece with a dice
                 {
                     ImageView border = findViewById(R.id.outHighlight1);
                     border.setVisibility(View.VISIBLE);
                 }
+                // check if the the highest column is smaller than the dice
                 else if (col != 19) {
                     if (col > 25 - this.MovePower1 || col > 25 - this.MovePower2) {
                         boolean flag = true;
@@ -914,12 +966,13 @@ public class OfflineGameActivity extends Activity {
                     }
                 }
             }
-        }else{
+        }else{ // if its red's turn
             if(checkForEndGame(this.turn)) {
-                if (col == this.MovePower1 || col == this.MovePower2) {
+                if (col == this.MovePower1 || col == this.MovePower2) { // if blue can remove a piece with a dice
                     ImageView border = findViewById(R.id.outHighlight2);
                     border.setVisibility(View.VISIBLE);
                 }
+                // check if the the highest column is smaller than the dice
                 else if(col != 6) {
                     if (col < this.MovePower1 || col < this.MovePower2) {
                         boolean flag = true;
@@ -936,9 +989,10 @@ public class OfflineGameActivity extends Activity {
                 }
             }
         }
+        // if blue is eaten
         if (col == -1)
         {
-            if (this.MovePower1 > 0) {
+            if (this.MovePower1 > 0) { // check is move1 is valid
                 col1 = this.MovePower1;
                 if(this.game.getAcolumn(col1).getList().size() > 1) {
                     if (this.game.getAcolumn(col1).getList().getFirst().getType() != this.turn) {
@@ -946,7 +1000,7 @@ public class OfflineGameActivity extends Activity {
                     }
                 }
             }
-            if (this.MovePower2 > 0) {
+            if (this.MovePower2 > 0) {// check is move2 is valid
                 col2 = this.MovePower2;
                 if (this.game.getAcolumn(col2).getList().size() > 1) {
                     if (this.game.getAcolumn(col2).getList().getFirst().getType() != this.turn) {
@@ -955,9 +1009,10 @@ public class OfflineGameActivity extends Activity {
                 }
             }
         }
+        // if red is eaten
         else if (col == -2)
         {
-            if (this.MovePower1 > 0) {
+            if (this.MovePower1 > 0) {// check is move1 is valid
                 col1 = 25 - this.MovePower1;
                 if (this.game.getAcolumn(col1).getList().size() > 1) {
                     if (this.game.getAcolumn(col1).getList().getFirst().getType() != this.turn) {
@@ -965,7 +1020,7 @@ public class OfflineGameActivity extends Activity {
                     }
                 }
             }
-            if (this.MovePower2 > 0) {
+            if (this.MovePower2 > 0) {// check is move2 is valid
                 col2 = 25 - this.MovePower2;
                 if (this.game.getAcolumn(col2).getList().size() > 1) {
                     if (this.game.getAcolumn(col2).getList().getFirst().getType() != this.turn) {
@@ -976,7 +1031,7 @@ public class OfflineGameActivity extends Activity {
         }
         else
         {
-            int mult;
+            int mult; // mult differentiate between the moves of red and blue as they move in different directions
             int type = this.game.getAcolumn(col).getList().get(0).getType();
             if (type == 1) {
                 mult = 1;
@@ -984,6 +1039,7 @@ public class OfflineGameActivity extends Activity {
             else{
                 mult = -1;
             }
+            // check if the moves are legal moves and if not than change the dest columns to 0 because then they won't be highlighted
             col1 = col + mult*this.MovePower1;
             if (col1 > 0 && col1 < 25) {
                 if (this.game.getAcolumn(col1).getList().size() > 1) {
@@ -1001,12 +1057,13 @@ public class OfflineGameActivity extends Activity {
                 }
             }
         }
+        // highlight column 1 if every test says that he is a legal column to move to
         if (col1 > 0 && col1 != col && col1 <= 24) {
-            if (col1 > 12) {
+            if (col1 > 12) { // bottom column
                 ImageView highlight = findViewById(R.id.ColumnHighlihgt3);
                 highlight.setX(this.columnsPos[col1-1][0][0] + 7);
                 highlight.setVisibility(View.VISIBLE);
-            } else {
+            } else {// top column
                 ImageView highlight = findViewById(R.id.ColumnHighlihgt1);
                 if(col1 == 6)
                 {
@@ -1019,12 +1076,13 @@ public class OfflineGameActivity extends Activity {
                 highlight.setVisibility(View.VISIBLE);
             }
         }
+        // highlight column 2 if every test says that he is a legal column to move to
         if (col2 > 0 && col2 != col && col2 <= 24) {
-            if (col2 > 12) {
+            if (col2 > 12) {// bottom column
                 ImageView highlight = findViewById(R.id.ColumnHighlihgt4);
                 highlight.setX(this.columnsPos[col2-1][0][0] + 7);
                 highlight.setVisibility(View.VISIBLE);
-            } else {
+            } else {// top column
                 ImageView highlight = findViewById(R.id.ColumnHighlihgt2);
                 if(col2 == 6)
                 {
@@ -1038,9 +1096,9 @@ public class OfflineGameActivity extends Activity {
             }
         }
     }
-    public void diHighlightColumns() {
+    public void unHighlightColumns() {
         /*
-        this function will diHighlight possible columns
+        this function will unHighlight possible columns
         param: none
         return: void
          */
@@ -1072,12 +1130,12 @@ public class OfflineGameActivity extends Activity {
         param: type : int
         return: boolean
          */
-        if (type == 1){
+        if (type == 1){ // if checking for blue
             if (this.is_blue_eaten == true)
             {
                 return false;
             }
-            for (int i=1;i<19;i++)
+            for (int i=1;i<19;i++) // go through all the columns in the blue quarter
             {
                 if(this.game.getAcolumn(i).getList().size() != 0)
                 {
@@ -1089,13 +1147,13 @@ public class OfflineGameActivity extends Activity {
             }
             return true;
         }
-        else
+        else // if checking for red
         {
             if (this.is_red_eaten == true)
             {
                 return false;
             }
-            for (int i=24;i>6;i--)
+            for (int i=24;i>6;i--)// go through all the columns in the red quarter
             {
                 if(this.game.getAcolumn(i).getList().size() != 0)
                 {
@@ -1109,18 +1167,18 @@ public class OfflineGameActivity extends Activity {
         }
 
     }
-    public boolean endGameMove(int col){
+    public boolean endGameMove(int col) {
         /*
         this function will handle when a player wants to out a piece in the end game
         param: col : int
         return: boolean
          */
-        if(this.game.getAcolumn(col).getList().getFirst().getType() == 1)
+        if(this.game.getAcolumn(col).getList().getFirst().getType() == 1) // if the piece moving out is blue
         {
-            System.out.println("please2");
-            if(col == 25-this.MovePower1 || col == 25-this.MovePower2)
+            if(col == 25-this.MovePower1 || col == 25-this.MovePower2) // checking if the column moving is equal to one move power
             {
-                System.out.println("please3");
+                // take piece out
+
                 Piece p = this.game.getAcolumn(col).getList().getLast();
                 this.blueOut.add(p);
                 this.game.getAcolumn(col).getList().removeLast();
@@ -1128,6 +1186,9 @@ public class OfflineGameActivity extends Activity {
                 bluepieceout.setVisibility(View.VISIBLE);
                 ImageView img = findViewById(p.getId());
                 img.setVisibility(View.INVISIBLE);
+
+                // use the move power
+
                 if(col == 25-this.MovePower1) {
                     if (this.NumOfMoves <= 2) {
                         ImageView img5 = findViewById(R.id.dice5);
@@ -1148,7 +1209,7 @@ public class OfflineGameActivity extends Activity {
                 }
                 return true;
             }
-            else if (col > 25-this.MovePower1 || col > 25-this.MovePower2)
+            else if (col > 25-this.MovePower1 || col > 25-this.MovePower2)// checking if the column smaller than each move powers
             {
                 boolean flag = true;
                 for (int i=col-1;i>=19;i--){
@@ -1159,7 +1220,7 @@ public class OfflineGameActivity extends Activity {
                 }
                 if(flag)
                 {
-                    System.out.println("please3");
+                    // take piece out
                     Piece p = this.game.getAcolumn(col).getList().getLast();
                     this.blueOut.add(p);
                     this.game.getAcolumn(col).getList().removeLast();
@@ -1167,8 +1228,10 @@ public class OfflineGameActivity extends Activity {
                     bluepieceout.setVisibility(View.VISIBLE);
                     ImageView img = findViewById(p.getId());
                     img.setVisibility(View.INVISIBLE);
+
                     int move;
                     boolean flag1 = false;
+                    // find which move was used
                     if(this.MovePower1 > this.MovePower2)
                     {
                         move = this.MovePower1;
@@ -1179,6 +1242,7 @@ public class OfflineGameActivity extends Activity {
                         flag1 = false;
                         move = this.MovePower2;
                     }
+                    // use the move power
                     if(col > 25-move) {
                         if (this.NumOfMoves <= 2) {
                             if(flag1) {
@@ -1202,11 +1266,11 @@ public class OfflineGameActivity extends Activity {
                 }
             }
         }
-        else
+        else // if the piece moving out is red
         {
-            if(col == this.MovePower1 || col == this.MovePower2)
+            if(col == this.MovePower1 || col == this.MovePower2) // checking if the column moving is equal to one move power
             {
-                System.out.println("please3");
+                // take piece out
                 Piece p = this.game.getAcolumn(col).getList().getLast();
                 this.redOut.add(p);
                 this.game.getAcolumn(col).getList().removeLast();
@@ -1214,6 +1278,8 @@ public class OfflineGameActivity extends Activity {
                 redpieceout.setVisibility(View.VISIBLE);
                 ImageView img = findViewById(p.getId());
                 img.setVisibility(View.INVISIBLE);
+                // use the move power
+
                 if(col == this.MovePower1) {
                     if (this.NumOfMoves <= 2) {
                         ImageView img5 = findViewById(R.id.dice5);
@@ -1234,7 +1300,7 @@ public class OfflineGameActivity extends Activity {
                 }
                 return true;
             }
-            else if (col < this.MovePower1 || col < this.MovePower2)
+            else if (col < this.MovePower1 || col < this.MovePower2) // checking if the column smaller than each move powers
             {
                 boolean flag = true;
                 for (int i=col+1;i<=6;i++){
@@ -1245,7 +1311,7 @@ public class OfflineGameActivity extends Activity {
                 }
                 if(flag)
                 {
-                    System.out.println("please3");
+                    // take piece out
                     Piece p = this.game.getAcolumn(col).getList().getLast();
                     this.redOut.add(p);
                     this.game.getAcolumn(col).getList().removeLast();
@@ -1253,8 +1319,10 @@ public class OfflineGameActivity extends Activity {
                     redpieceout.setVisibility(View.VISIBLE);
                     ImageView img = findViewById(p.getId());
                     img.setVisibility(View.INVISIBLE);
+
                     int move;
                     boolean flag1 = false;
+                    // find which move was used
                     if(this.MovePower1 > this.MovePower2)
                     {
                         move = this.MovePower1;
@@ -1265,6 +1333,7 @@ public class OfflineGameActivity extends Activity {
                         flag1 = false;
                         move = this.MovePower2;
                     }
+                    // use the move power
                     if(col < move) {
                         if (this.NumOfMoves <= 2) {
                             if(flag1) {
@@ -1296,10 +1365,8 @@ public class OfflineGameActivity extends Activity {
         param: type : int
         return: boolean
          */
-        System.out.println("blabla: "+type);
         if (type == 1){
-            System.out.println(blueOut.size());
-            if (this.blueOut.size() == 15)
+            if (this.blueOut.size() == 15) // check if all 15 pieces are out
             {
                 this.whoWon = 1;
                 return true;
@@ -1310,8 +1377,7 @@ public class OfflineGameActivity extends Activity {
             }
         }
         else{
-            System.out.println(redOut.size());
-            if (this.redOut.size() == 15)
+            if (this.redOut.size() == 15)// check if all 15 pieces are out
             {
                 this.whoWon = 0;
                 return true;
@@ -1330,10 +1396,10 @@ public class OfflineGameActivity extends Activity {
          */
         if (type == 1)
         {
-            if (col == 25-this.MovePower1 || col == 25-this.MovePower2) {
+            if (col == 25-this.MovePower1 || col == 25-this.MovePower2) { // checking if the column moving is equal to one move power
                 return true;
             }
-            else if(col > 25-this.MovePower1 || col > 25-this.MovePower2) {
+            else if(col > 25-this.MovePower1 || col > 25-this.MovePower2) { // checking if the column smaller than each move powers
                 return true;
             }
             else {
@@ -1343,10 +1409,10 @@ public class OfflineGameActivity extends Activity {
         }
         else
         {
-            if (col == this.MovePower1 || col == this.MovePower2) {
+            if (col == this.MovePower1 || col == this.MovePower2) {// checking if the column moving is equal to one move power
                 return true;
             }
-            else if(col < this.MovePower1 || col < this.MovePower2) {
+            else if(col < this.MovePower1 || col < this.MovePower2) { // checking if the column smaller than each move powers
                 return true;
             }
             else{
@@ -1360,6 +1426,7 @@ public class OfflineGameActivity extends Activity {
         param: type : int
         return: void
          */
+        // show the winning text
         TextView txtview = findViewById(R.id.winsign);
         if (type == 1){
             txtview.setText(name_player_1 + " WON!");
@@ -1369,6 +1436,7 @@ public class OfflineGameActivity extends Activity {
             txtview.setText(name_player_2 + " WON!");
             txtview.setTextColor(Color.RED);
         }
+        // show the save and exit buttons
         Button button1 = findViewById(R.id.savebutton);
         Button button2 = findViewById(R.id.exitbutton);
         txtview.setVisibility(View.VISIBLE);
@@ -1407,10 +1475,11 @@ public class OfflineGameActivity extends Activity {
                 root.mkdir();
             }
             File file = new File(root,this.FileName);
-            BufferedReader br = new BufferedReader(new FileReader(file));
+            BufferedReader br = new BufferedReader(new FileReader(file)); // create reader
             String line;
-            while((line = br.readLine()) != null)
+            while((line = br.readLine()) != null) // read file line by line
             {
+                // append text builder
                 text.append(line);
                 text.append("\n");
             }
@@ -1418,9 +1487,7 @@ public class OfflineGameActivity extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("here: ");
-        System.out.println(text.toString());
-        return text.toString();
+        return text.toString(); // return the text
     }
     public void saveResult(View view) {
         /*
@@ -1443,7 +1510,9 @@ public class OfflineGameActivity extends Activity {
         param: none
         return: void
          */
+        // read body from file
         String sBody = readFile();
+        // add new result to body
         if (this.whoWon == 1) {
             sBody += name_player_1;
             sBody += "#";
@@ -1461,6 +1530,7 @@ public class OfflineGameActivity extends Activity {
             sBody += Integer.toString(15-this.blueOut.size());
         }
         sBody += "\n";
+        // open the file write and close
         try{
             File root = new File(Environment.getExternalStorageDirectory(), "Files");
             if (!root.exists()) {
@@ -1474,26 +1544,6 @@ public class OfflineGameActivity extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        StringBuilder text = new StringBuilder();
-        try{
-            File root = new File(Environment.getExternalStorageDirectory(), "Files");
-            if (!root.exists()) {
-                root.mkdir();
-            }
-            File file = new File(root,this.FileName);
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-            while((line = br.readLine()) != null)
-            {
-                text.append(line);
-                text.append("\n");
-            }
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("here: ");
-        System.out.println(text.toString());
     }
     public void exitActivity(View view) {
         /*
@@ -1514,72 +1564,70 @@ public class OfflineGameActivity extends Activity {
             switch (e.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     if (this.NumOfMoves > 0) {
+                        // get the touch location rounded
                         int x = round(e.getX());
                         int y = round(e.getY());
+                        // find the column pressed
                         int col = findColumn(x, y);
-                        if (this.press == 0) {
-                            if (col != -1) {
-                                if (this.is_blue_eaten && this.turn == 1) {
-                                    this.press = 1;
-                                    this.col_pressed = -1;
-                                } else if (this.is_red_eaten && this.turn == 0) {
-                                    this.press = 1;
-                                    this.col_pressed = -2;
-                                } else if (!CheckIfColumnIsEmpty(col)) {
-                                    if (this.game.getAcolumn(col).getList().get(0).getType() == this.turn) {
-                                        this.press = 1;
-                                        this.col_pressed = col;
-                                        highlightColumn(col, true);
-                                        highlightPossibleColumns(col);
+                        if (this.press == 0) { // if its first press for the turn
+                            if (col != -1) { // if the column is a valid column
+                                if (this.is_blue_eaten && this.turn == 1) { // is blue is eaten piece and its his turn
+                                    this.press = 1;// set as pressed
+                                    this.col_pressed = -1; // set column pressed as -1
+                                } else if (this.is_red_eaten && this.turn == 0) { // is red is eaten piece and its his turn
+                                    this.press = 1;// set as pressed
+                                    this.col_pressed = -2;// set column pressed as -2
+                                } else if (!CheckIfColumnIsEmpty(col)) {// check if the column is not empty
+                                    if (this.game.getAcolumn(col).getList().get(0).getType() == this.turn) { // check if the column pressed match the turn player
+                                        this.press = 1; // set as pressed
+                                        this.col_pressed = col; // set column pressed to the column pressed
+                                        highlightColumn(col, true); // highlight the column
+                                        highlightPossibleColumns(col); // highlight possible move columns
                                     }
                                 }
                             }
-                        } else {
-                            if (col == -1) {
-                                if (checkForEndGame(this.turn)) {
-                                    System.out.println("please0");
-                                    if (IsValidOut(this.col_pressed, this.turn)) {
-                                        System.out.println("please1");
-                                        boolean flag = endGameMove(this.col_pressed);
-                                        if (flag){
+                        } else { // if its second press
+                            if (col == -1) { // if second press is not on a column
+                                if (checkForEndGame(this.turn)) { // check if its end game for the player
+                                    if (IsValidOut(this.col_pressed, this.turn)) { // check if the out move is valid
+                                        boolean flag = endGameMove(this.col_pressed); // move the piece
+                                        if (flag){ // if the piece moved minus one move
                                             this.NumOfMoves--;
                                         }
-                                        if (checkIfGameEnded(this.turn)) {
+                                        if (checkIfGameEnded(this.turn)) { // check if the game ended
                                             this.didGameEnd = true;
                                             EndTheGame(this.turn);
                                         }
                                     }
-                                    if (this.NumOfMoves == 0) {
+                                    if (this.NumOfMoves == 0) {// check for end of turn
                                         this.turn = Math.abs(this.turn - 1);
-                                        System.out.println(this.turn);
                                     }
                                 }
-                            } else {
-                                if (IsValidMove(this.col_pressed, col)) {
-                                    move(this.col_pressed, col);
+                            } else { // if its a normal move
+                                if (IsValidMove(this.col_pressed, col)) { // if move is valid
+                                    move(this.col_pressed, col); // move piece
                                     this.NumOfMoves--;
-                                    if (this.NumOfMoves == 0) {
+                                    if (this.NumOfMoves == 0) { // check for end of turn
                                         this.turn = Math.abs(this.turn - 1);
-                                        System.out.println(this.turn);
                                     }
                                 }
                             }
-                            highlightColumn(this.col_pressed, false);
-                            diHighlightColumns();
+                            highlightColumn(this.col_pressed, false); // unhighlight column
+                            unHighlightColumns(); // unhighlight possible columns
                             this.press = 0;
                         }
-                        if ((this.col_pressed == -1 || this.col_pressed == -2) && this.press == 1) {
-                            if (col != -1) {
-                                if (IsValidMove(this.col_pressed, col)) {
-                                    GetOutOfEat(this.col_pressed, col);
+                        if ((this.col_pressed == -1 || this.col_pressed == -2) && this.press == 1) { // if there is a piece eaten and the press is 1 (meaning it passed the first check at the start of this function)
+                            if (col != -1) { // if the press is a valid column
+                                if (IsValidMove(this.col_pressed, col)) { // if the move is valid
+                                    GetOutOfEat(this.col_pressed, col); // get the piece out of eat
                                     this.NumOfMoves--;
-                                    diHighlightColumns();
-                                    if (this.NumOfMoves == 0) {
+                                    unHighlightColumns(); // unhighlight possible columns
+                                    if (this.NumOfMoves == 0) { // check for end of turn
                                         this.turn = Math.abs(this.turn - 1);
-                                        System.out.println(this.turn);
                                     }
                                     else
                                     {
+                                        // if there are still pieces eaten and the turn isn't over highlight possible columns again
                                         if(this.turn == 1 && this.is_blue_eaten)
                                         {
                                             if(AreThereAnyPossibleMoves(1)) {
@@ -1594,14 +1642,15 @@ public class OfflineGameActivity extends Activity {
                                         }
                                     }
                                 }
-
+                                // set press to 0
                                 this.press = 0;
                             }
                         }
                     }
                 case MotionEvent.ACTION_UP:
-                    if (this.NumOfMoves == 0) {
-                        this.rolled = false;
+                    if (this.NumOfMoves == 0) { // check if the turn has ended
+                        this.rolled = false; // set rolled as false
+                        // set arrow to the correct turn
                         ImageView arrow = findViewById(R.id.turnArrow);
                         if(this.turn == 1){
                             arrow.setImageResource(R.drawable.bluearrow);
@@ -1610,13 +1659,13 @@ public class OfflineGameActivity extends Activity {
                         {
                             arrow.setImageResource(R.drawable.redarrow);
                         }
+                        // set roll button to not glow
                         Button button1 = findViewById(R.id.roll1);
                         button1.setBackgroundResource(R.drawable.reddice);
                     }
                     else {
-                        System.out.println("oops0");
+                        // if there aren't any possible moves for the player change turn
                         if (!AreThereAnyPossibleMoves(this.turn)) {
-                            System.out.println("oops1");
                             this.turn = Math.abs(this.turn - 1);
                             this.NumOfMoves = 0;
                         }
