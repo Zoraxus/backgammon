@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -36,6 +37,8 @@ public class ShowRulesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_rules);
         this.mReceiver = new ShowRulesActivity.BatteryBroadcastReceiver();
+        Button button = findViewById(R.id.buttonPrev);
+        button.setVisibility(View.INVISIBLE);
     }
     private class BatteryBroadcastReceiver extends BroadcastReceiver {
         private boolean isLow = false;
@@ -98,6 +101,16 @@ public class ShowRulesActivity extends AppCompatActivity {
             img.setImageResource(this.Pages[currentPage]);
             this.currentPage ++;
         }
+        if(this.currentPage < 5)
+        {
+            Button button = findViewById(R.id.buttonPrev);
+            button.setVisibility(View.VISIBLE);
+        }
+        else {
+            Button button = findViewById(R.id.buttonNext);
+            button.setVisibility(View.INVISIBLE);
+        }
+
     }
     public void goPrev(View view){
         /*
@@ -109,6 +122,14 @@ public class ShowRulesActivity extends AppCompatActivity {
             ImageView img = findViewById(R.id.viewRules);
             img.setImageResource(this.Pages[currentPage - 2]);
             this.currentPage--;
+        }
+        if(this.currentPage > 1) {
+            Button button = findViewById(R.id.buttonNext);
+            button.setVisibility(View.VISIBLE);
+        }
+        else {
+            Button button = findViewById(R.id.buttonPrev);
+            button.setVisibility(View.INVISIBLE);
         }
     }
 
